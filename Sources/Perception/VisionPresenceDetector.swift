@@ -84,7 +84,7 @@ public actor VisionPresenceDetector {
         var survivingRequests: [VNTrackObjectRequest] = []
 
         for request in trackingRequests {
-            guard let observation = request.results?.first,
+            guard let observation = request.results?.first as? VNDetectedObjectObservation,
                   isLargeEnough(observation.boundingBox) else { continue }
 
             request.inputObservation = observation

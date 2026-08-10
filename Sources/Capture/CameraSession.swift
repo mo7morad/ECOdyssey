@@ -19,7 +19,10 @@ public enum CameraError: Error {
 /// blocking calls that must stay off the main thread, and the only state a view needs
 /// from here is the permission result, which is returned rather than observed.
 public actor CameraSession {
-    private let captureSession = AVCaptureSession()
+    // Read from `previewSource` off the actor to hand the layer a live session; the
+    // reference never changes after init and AVCaptureSession is documented as safe to
+    // touch from other threads for this purpose.
+    private nonisolated(unsafe) let captureSession = AVCaptureSession()
     private let videoOutput = AVCaptureVideoDataOutput()
     private let frameQueue = DispatchQueue(label: "com.ecodyssey.camera.frames")
     private var frameDelegate: FrameDelegate?

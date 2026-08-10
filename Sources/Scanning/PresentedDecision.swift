@@ -50,16 +50,16 @@ public struct PresentedDecision: Equatable, Sendable {
     ) -> String {
         switch reason {
         case .belowConfidenceThreshold:
-            "Could not identify this clearly. Please check the packaging label."
+            return "Could not identify this clearly. Please check the packaging label."
         case .noMatchingRule:
-            "This item is not covered by the sorting rules yet."
+            return "This item is not covered by the sorting rules yet."
         case .conflictingRules:
             let names = candidates.compactMap { ruleset.bin(for: $0)?.displayName }
             return names.isEmpty
                 ? "The sorting rules disagree about this item."
                 : "Could be \(names.joined(separator: " or ")). Please check the packaging label."
         case .perceptionUnavailable:
-            "Item recognition is unavailable right now."
+            return "Item recognition is unavailable right now."
         }
     }
 }
