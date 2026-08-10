@@ -1,6 +1,10 @@
-# Xcode
+# Xcode & iOS Build Products
 build/
 DerivedData/
+*.app
+*.ipa
+*.dSYM.zip
+*.dSYM
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -12,6 +16,12 @@ DerivedData/
 *.moved-aside
 *.drop
 *.swiftmodule
+*.xcscmblueprint
+
+# Xcode Test & Coverage Artifacts
+*.xcresult
+*.xccovreport
+*.xccovarchive
 
 # Xcode User Data (user-specific layout, open files, breakpoints)
 *.xcuserdata/
@@ -19,17 +29,33 @@ xcuserdata/
 
 # Swift Package Manager
 .build/
-Packages/*/.build/
+**/.build/
 .swiftpm/
+**/.swiftpm/
 
-# Tool Caches & Scratch
+# Tool Caches & AI Scratch
 .swiftlint_cache/
 .clang-module-cache/
 graphify-out/
 .gemini/
+.claude/
+.cursor/
+.zed/
 scratch/
 
-# macOS System Files
+# IDE & Editor Settings
+.idea/
+.vscode/
+*.swp
+*~
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# macOS & OS System Files
 .DS_Store
 .DS_Store?
 ._*
@@ -37,3 +63,4 @@ scratch/
 .Trashes
 ehthumbs.db
 Thumbs.db
+Icon?
