@@ -19,6 +19,8 @@ targets:
         SWIFT_STRICT_CONCURRENCY: complete
         SWIFT_VERSION: "6.0"
         TARGETED_DEVICE_FAMILY: "1,2"
+        DEVELOPMENT_TEAM: BD8SA4X398
+        CODE_SIGN_IDENTITY: "iPhone Developer"
     info:
       path: Sources/Info.plist
       properties:
