@@ -1,0 +1,33 @@
+name: ECOdyssey
+options:
+  bundleIdPrefix: com.mohamedmorad
+packages:
+  SortingKit:
+    path: Packages/SortingKit
+targets:
+  ECOdyssey:
+    type: application
+    platform: iOS
+    deploymentTarget: "26.0"
+    sources: [Sources]
+    dependencies:
+      - package: SortingKit
+    settings:
+      base:
+        # Makes the class of data race the original pipeline shipped with a compile
+        # error rather than a review finding.
+        SWIFT_STRICT_CONCURRENCY: complete
+        SWIFT_VERSION: "6.0"
+        TARGETED_DEVICE_FAMILY: "1,2"
+    info:
+      path: Sources/Info.plist
+      properties:
+        UILaunchScreen: {}
+        # A station is mounted in a fixed position. Letting the layout rotate under it
+        # would move the bin instruction out from under whoever is reading it.
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UIRequiresFullScreen: true
+        NSCameraUsageDescription: "ECOdyssey identifies waste items live to tell you which bin to use. Images are analysed on this device and are never saved or sent anywhere."

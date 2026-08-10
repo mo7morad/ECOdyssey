@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+
+  "bins": [
+    {
+      "id": "organic",
+      "displayName": "Organic",
+      "colorHex": "#34C759",
+      "spokenPhrase": "Organic waste",
+      "guidance": "Food scraps, plants, and certified compostable packaging."
+    },
+    {
+      "id": "recyclable",
+      "displayName": "Recyclable",
+      "colorHex": "#0A84FF",
+      "spokenPhrase": "Clean recyclable",
+      "guidance": "Clean and dry plastic, metal, paper, cardboard and glass."
+    },
+    {
+      "id": "residual",
+      "displayName": "Residual",
+      "colorHex": "#8E8E93",
+      "spokenPhrase": "Residual waste",
+      "guidance": "Everything else, plus anything soiled or made of bonded materials."
+    }
+  ],
+
+  "fallbackBinID": "residual",
+
+  "diversionBinIDs": ["organic", "recyclable"],
+  "recyclingBinIDs": ["recyclable"],
+
+  "rules": [
+    { "id": "food_waste",        "materials": ["food_waste"],                "binID": "organic",    "priority": 100 },
+    { "id": "plant_matter",      "materials": ["plant_matter"],              "binID": "organic",    "priority": 100 },
+    { "id": "compostable_ware",  "materials": ["compostable_packaging"],     "binID": "organic",    "priority": 100 },
+
+    { "id": "clean_plastic",     "materials": ["pet_plastic", "hdpe_plastic"], "binID": "recyclable", "priority": 100,
+      "requires": { "foodSoiled": false } },
+    { "id": "soiled_plastic",    "materials": ["pet_plastic", "hdpe_plastic"], "binID": "residual",   "priority": 200,
+      "requires": { "foodSoiled": true },
+      "note": "Food residue contaminates the plastic stream." },
+
+    { "id": "clean_metal",       "materials": ["aluminium", "steel"],        "binID": "recyclable", "priority": 100,
+      "requires": { "foodSoiled": false } },
+    { "id": "soiled_metal",      "materials": ["aluminium", "steel"],        "binID": "residual",   "priority": 200,
+      "requires": { "foodSoiled": true } },
+
+    { "id": "clean_paper",       "materials": ["paper"],                     "binID": "recyclable", "priority": 100,
+      "requires": { "foodSoiled": false } },
+    { "id": "soiled_paper",      "materials": ["paper"],                     "binID": "residual",   "priority": 200,
+      "requires": { "foodSoiled": true },
+      "note": "Napkins and paper towels are almost always soiled." },
+
+    { "id": "clean_cardboard",   "materials": ["cardboard"],                 "binID": "recyclable", "priority": 100,
+      "requires": { "foodSoiled": false } },
+    { "id": "soiled_cardboard",  "materials": ["cardboard"],                 "binID": "residual",   "priority": 200,
+      "requires": { "foodSoiled": true },
+      "note": "Grease contaminates the paper stream — pizza boxes belong here." },
+
+    { "id": "glass",             "materials": ["glass"],                     "binID": "recyclable", "priority": 100 },
+
+    { "id": "composite_item",    "materials": ["composite"],                 "binID": "residual",   "priority": 300,
+      "requires": { "isComposite": true },
+      "note": "Bonded materials such as lined coffee cups cannot be separated by hand." },
+    { "id": "soft_plastic",      "materials": ["soft_plastic"],              "binID": "residual",   "priority": 100,
+      "note": "Bags and film jam sorting machinery." },
+    { "id": "polystyrene",       "materials": ["polystyrene"],               "binID": "residual",   "priority": 100 },
+    { "id": "general_waste",     "materials": ["general_waste"],             "binID": "residual",   "priority": 100 }
+  ],
+
+  "visionKeywordHints": {
+    "food_waste": [
+      "banana", "apple", "orange", "bread", "pizza", "sandwich", "burger", "hotdog",
+      "broccoli", "carrot", "cucumber", "lemon", "strawberry", "pineapple", "corn",
+      "mushroom", "bagel", "pretzel", "cheeseburger", "meat loaf", "eggshell",
+      "coffee grounds", "banana peel", "apple core", "orange peel"
+    ],
+    "plant_matter": ["flower", "leaf", "plant", "daisy", "rose", "potted plant"],
+    "pet_plastic": [
+      "water bottle", "pop bottle", "soda bottle", "plastic bottle", "sports bottle",
+      "shampoo bottle", "detergent bottle", "milk jug"
+    ],
+    "hdpe_plastic": ["plastic container", "tupperware", "yoghurt pot", "plastic tub"],
+    "soft_plastic": [
+      "plastic bag", "shopping bag", "wrapper", "cling film", "packet", "sachet",
+      "bubble wrap", "plastic wrap"
+    ],
+    "polystyrene": ["styrofoam", "foam cup", "polystyrene"],
+    "aluminium": [
+      "beer can", "soda can", "pop can", "tin can", "aluminium can", "aluminum can",
+      "drink can", "aluminium foil", "aluminum foil", "tinfoil"
+    ],
+    "steel": ["food can", "soup can", "steel can", "aerosol can", "bottle cap"],
+    "paper": [
+      "newspaper", "magazine", "envelope", "notebook", "paper", "receipt", "flyer",
+      "paper towel", "napkin", "tissue", "menu"
+    ],
+    "cardboard": ["carton", "cardboard", "packet box", "shipping box", "cereal box", "egg carton"],
+    "glass": [
+      "wine bottle", "beer bottle", "glass bottle", "jar", "mason jar", "drinking glass",
+      "goblet", "beaker"
+    ],
+    "composite": ["coffee cup", "paper cup", "takeaway cup", "juice box", "drink carton", "toothpaste tube"],
+    "general_waste": ["cigarette", "chewing gum", "battery", "pen", "toothbrush", "sponge", "rubber glove"]
+  }
+}

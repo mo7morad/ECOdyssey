@@ -1,0 +1,17 @@
+function_body_length:
+  warning: 20
+  error: 30
+
+cyclomatic_complexity:
+  warning: 10
+  error: 15
+
+nesting:
+  type_level:
+    warning: 3
+  function_level:
+    warning: 5
+
+excluded:
+  - .build
+  - Packages/SortingKit/.build

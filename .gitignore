@@ -1,0 +1,39 @@
+# Xcode
+build/
+DerivedData/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.hmap
+*.xccheckout
+*.moved-aside
+*.drop
+*.swiftmodule
+
+# Xcode User Data (user-specific layout, open files, breakpoints)
+*.xcuserdata/
+xcuserdata/
+
+# Swift Package Manager
+.build/
+Packages/*/.build/
+.swiftpm/
+
+# Tool Caches & Scratch
+.swiftlint_cache/
+.clang-module-cache/
+graphify-out/
+.gemini/
+scratch/
+
+# macOS System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
