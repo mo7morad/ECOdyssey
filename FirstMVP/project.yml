@@ -1,0 +1,15 @@
+name: FirstMVP
+options:
+  bundleIdPrefix: com.mohamedmorad
+targets:
+  FirstMVP:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources: [Sources]
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: true
+        INFOPLIST_KEY_NSCameraUsageDescription: "FirstMVP analyses waste items live on this device to suggest the correct bin."
+        INFOPLIST_KEY_NSPhotoLibraryUsageDescription: "FirstMVP can classify a waste item from a photo you select."
+        INFOPLIST_KEY_UILaunchScreen_Generation: true
