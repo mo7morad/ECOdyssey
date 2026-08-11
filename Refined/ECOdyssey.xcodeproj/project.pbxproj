@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01E341E5AA0082616095F737 /* WastePhotoSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF535AB6B3074EEBAF0F933 /* WastePhotoSample.swift */; };
 		02E53915747F174ABBB8E768 /* ScanEventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D29B6BD9552D03A4A5BC207 /* ScanEventStore.swift */; };
 		0408E52D4B5F6D0A7B427E22 /* BinAnnouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659DE3BDCF016D43B58F6F27 /* BinAnnouncer.swift */; };
 		1429741E68F76B9F0D14BEDC /* SortingKit in Frameworks */ = {isa = PBXBuildFile; productRef = 93A862A07C8CEB73F644F9E1 /* SortingKit */; };
@@ -15,6 +16,9 @@
 		203A8A858586090FAD0D28F1 /* VisionPresenceDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19D880814FA6D4F37A0F991 /* VisionPresenceDetector.swift */; };
 		235FAF15D52324B0E57297AE /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E51E8FC74D4A9B67C712A3 /* CameraPreviewView.swift */; };
 		375F858030464CEE224B1DA9 /* CSVExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = F435C26054823A22E4185EF0 /* CSVExport.swift */; };
+		38FD88F49F2E23E2069A8439 /* GalleryScanScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C78F9C8FC8F9A90BF51A86 /* GalleryScanScreen.swift */; };
+		3B31C0B7BD96348AEF3F3EF6 /* Photos in Resources */ = {isa = PBXBuildFile; fileRef = BC1403EFA82135EF199A41F4 /* Photos */; };
+		4D9FEF40569B2E4AA2302C06 /* SortingKit in Frameworks */ = {isa = PBXBuildFile; productRef = E228A6ABFC4875670E7B23A5 /* SortingKit */; };
 		5B9D628A36014BD41FBED883 /* StartupFailureScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430CC6B74D486153488EC620 /* StartupFailureScreen.swift */; };
 		5C92D5B1936D7A70F0FC92DB /* FrameBudget.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB5591BB64B2792710F1C654 /* FrameBudget.swift */; };
 		5EA7D3D414220EAE72E2AB53 /* PresentedDecision.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0551A83771BC199F3BFAC0B /* PresentedDecision.swift */; };
@@ -25,19 +29,34 @@
 		89D9F562E6F81AFABDEE93FC /* ScanEventRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7365CF00651ECC9DF5EA4F9 /* ScanEventRecord.swift */; };
 		8FE65F0C301CEE161B1749B9 /* BinOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB05D759D28473DE8422F23 /* BinOverlay.swift */; };
 		9668637BA2B4B44F6A55514C /* LegacyRecordImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFFCF46F19CE4B02E01B4D76 /* LegacyRecordImporter.swift */; };
+		9C86B4594ED66FE4C445FC97 /* StillImageScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D952A293627E4FDA3B1E0CB /* StillImageScanner.swift */; };
 		A537691CB86AF61A786B9307 /* StationIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D452EB2FBFBC102124DBC32 /* StationIdentity.swift */; };
 		ACE1438E05824082B738C01F /* ECOdysseyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CD8CA22278410E16009BEC /* ECOdysseyApp.swift */; };
 		B49CF5DB84146D6E5A17E92F /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E9EBEFEACCC95FE98B6011 /* AppEnvironment.swift */; };
 		B9E79258BCDC8D7D639D3AAE /* CameraSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E22E77E3B087E85B6BEBC2 /* CameraSession.swift */; };
 		BC67DDB0A499A5C1B614C75E /* PerceptionFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1537B807843E75632E2F641 /* PerceptionFrame.swift */; };
 		C336ADFA09D0682A989CB3BA /* ScannerScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A736CF748216ECB781AA07 /* ScannerScreen.swift */; };
+		D2EB7BBCAF862FF8D0926A5C /* UprightImageDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87AF4DF59EEA138C2E86DBC /* UprightImageDecoder.swift */; };
 		DB04A2E52653BB35A7B5F692 /* DecisionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE08FC8AA2A2708D0098E69E /* DecisionCard.swift */; };
 		E23713A5F453ED4DA5B2A37F /* AnalyticsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E3EC1FBFD7AEAD4A3AE731 /* AnalyticsScreen.swift */; };
+		EC08EB5CF74C2E88EA917B41 /* BinRoutingEvaluationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE076A8EF4EB01192A64884D /* BinRoutingEvaluationTests.swift */; };
 		F951BE5E5DCDC83418183E18 /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE46FBEB1AA89C19AF2567D /* Color+Hex.swift */; };
+		FB20AAB4121A642C9937B7EE /* BinRoutingEvaluation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A75358279031FDF36AC4CC0 /* BinRoutingEvaluation.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		50E5D0130228367CA11BE83C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 13D04813E5F26D2BDEDD86B1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6787BD2B9875051241E042DF;
+			remoteInfo = ECOdyssey;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		11CD8CA22278410E16009BEC /* ECOdysseyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECOdysseyApp.swift; sourceTree = "<group>"; };
+		12C78F9C8FC8F9A90BF51A86 /* GalleryScanScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryScanScreen.swift; sourceTree = "<group>"; };
 		17E6E1D28694AAD34C37E64A /* PermissionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionScreen.swift; sourceTree = "<group>"; };
 		2AE46FBEB1AA89C19AF2567D /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
 		2CFAC52299B7CEEC8F7231B7 /* VisionKeywordPerception.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionKeywordPerception.swift; sourceTree = "<group>"; };
@@ -48,24 +67,31 @@
 		47E51E8FC74D4A9B67C712A3 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
 		59ABE3554819FE12183906FB /* ECOdyssey.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ECOdyssey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		59E9EBEFEACCC95FE98B6011 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		5A75358279031FDF36AC4CC0 /* BinRoutingEvaluation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinRoutingEvaluation.swift; sourceTree = "<group>"; };
+		5D0AC042349FD237EBCC28A9 /* ECOdysseyEvaluations.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ECOdysseyEvaluations.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D29B6BD9552D03A4A5BC207 /* ScanEventStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanEventStore.swift; sourceTree = "<group>"; };
 		659DE3BDCF016D43B58F6F27 /* BinAnnouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinAnnouncer.swift; sourceTree = "<group>"; };
+		6D952A293627E4FDA3B1E0CB /* StillImageScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StillImageScanner.swift; sourceTree = "<group>"; };
 		8BA368976440E76C0DE04E89 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8F3860719E6009F315FAAF0F /* KioskLifecycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KioskLifecycle.swift; sourceTree = "<group>"; };
 		910145F44C3DBBB60FD30F24 /* FoundationModelPerception.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundationModelPerception.swift; sourceTree = "<group>"; };
 		912770F1064816C84983F792 /* ScanCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanCoordinator.swift; sourceTree = "<group>"; };
 		B1537B807843E75632E2F641 /* PerceptionFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerceptionFrame.swift; sourceTree = "<group>"; };
+		B87AF4DF59EEA138C2E86DBC /* UprightImageDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UprightImageDecoder.swift; sourceTree = "<group>"; };
+		BC1403EFA82135EF199A41F4 /* Photos */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Photos; path = Evaluations/Photos; sourceTree = SOURCE_ROOT; };
 		BEB05D759D28473DE8422F23 /* BinOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinOverlay.swift; sourceTree = "<group>"; };
 		C7365CF00651ECC9DF5EA4F9 /* ScanEventRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanEventRecord.swift; sourceTree = "<group>"; };
 		D0551A83771BC199F3BFAC0B /* PresentedDecision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentedDecision.swift; sourceTree = "<group>"; };
 		D19D880814FA6D4F37A0F991 /* VisionPresenceDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionPresenceDetector.swift; sourceTree = "<group>"; };
 		D8E3EC1FBFD7AEAD4A3AE731 /* AnalyticsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsScreen.swift; sourceTree = "<group>"; };
 		DB5591BB64B2792710F1C654 /* FrameBudget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameBudget.swift; sourceTree = "<group>"; };
+		DE076A8EF4EB01192A64884D /* BinRoutingEvaluationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinRoutingEvaluationTests.swift; sourceTree = "<group>"; };
 		E7F907EEC15961BAF760E0BC /* ThroughputChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThroughputChart.swift; sourceTree = "<group>"; };
 		EE08FC8AA2A2708D0098E69E /* DecisionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecisionCard.swift; sourceTree = "<group>"; };
 		EFFCF46F19CE4B02E01B4D76 /* LegacyRecordImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyRecordImporter.swift; sourceTree = "<group>"; };
 		F0DA1704E343A4054CB1D5C7 /* SortingKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SortingKit; path = Packages/SortingKit; sourceTree = SOURCE_ROOT; };
 		F435C26054823A22E4185EF0 /* CSVExport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVExport.swift; sourceTree = "<group>"; };
+		FDF535AB6B3074EEBAF0F933 /* WastePhotoSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WastePhotoSample.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +100,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				1429741E68F76B9F0D14BEDC /* SortingKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF195D39B4663759C0759846 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D9FEF40569B2E4AA2302C06 /* SortingKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,8 +156,19 @@
 			children = (
 				D0551A83771BC199F3BFAC0B /* PresentedDecision.swift */,
 				912770F1064816C84983F792 /* ScanCoordinator.swift */,
+				6D952A293627E4FDA3B1E0CB /* StillImageScanner.swift */,
 			);
 			path = Scanning;
+			sourceTree = "<group>";
+		};
+		7322752043EB8A5E554357CD /* Evaluations */ = {
+			isa = PBXGroup;
+			children = (
+				5A75358279031FDF36AC4CC0 /* BinRoutingEvaluation.swift */,
+				DE076A8EF4EB01192A64884D /* BinRoutingEvaluationTests.swift */,
+				FDF535AB6B3074EEBAF0F933 /* WastePhotoSample.swift */,
+			);
+			path = Evaluations;
 			sourceTree = "<group>";
 		};
 		93800AACCCAFD3BA4F13DBEC /* UI */ = {
@@ -133,6 +178,7 @@
 				BEB05D759D28473DE8422F23 /* BinOverlay.swift */,
 				2AE46FBEB1AA89C19AF2567D /* Color+Hex.swift */,
 				EE08FC8AA2A2708D0098E69E /* DecisionCard.swift */,
+				12C78F9C8FC8F9A90BF51A86 /* GalleryScanScreen.swift */,
 				17E6E1D28694AAD34C37E64A /* PermissionScreen.swift */,
 				37A736CF748216ECB781AA07 /* ScannerScreen.swift */,
 				430CC6B74D486153488EC620 /* StartupFailureScreen.swift */,
@@ -144,6 +190,8 @@
 		A3A173DEC1C6288ED57540EA = {
 			isa = PBXGroup;
 			children = (
+				BC1403EFA82135EF199A41F4 /* Photos */,
+				7322752043EB8A5E554357CD /* Evaluations */,
 				A890FD72541A92681A6A2FEC /* Packages */,
 				07FA1D9F6C2D924F4B5E600F /* Sources */,
 				CD6A7ADD1DE420A6007455C2 /* Products */,
@@ -173,6 +221,7 @@
 			isa = PBXGroup;
 			children = (
 				59ABE3554819FE12183906FB /* ECOdyssey.app */,
+				5D0AC042349FD237EBCC28A9 /* ECOdysseyEvaluations.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -183,6 +232,7 @@
 				47E51E8FC74D4A9B67C712A3 /* CameraPreviewView.swift */,
 				43E22E77E3B087E85B6BEBC2 /* CameraSession.swift */,
 				DB5591BB64B2792710F1C654 /* FrameBudget.swift */,
+				B87AF4DF59EEA138C2E86DBC /* UprightImageDecoder.swift */,
 			);
 			path = Capture;
 			sourceTree = "<group>";
@@ -217,6 +267,27 @@
 			productReference = 59ABE3554819FE12183906FB /* ECOdyssey.app */;
 			productType = "com.apple.product-type.application";
 		};
+		748878AE8FFB46FFD773AC73 /* ECOdysseyEvaluations */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 39BC9E6B8512DE781EE2C0A6 /* Build configuration list for PBXNativeTarget "ECOdysseyEvaluations" */;
+			buildPhases = (
+				E011007655A50A3D6D4A5569 /* Sources */,
+				9B0B16B7484B7BF4DD704035 /* Resources */,
+				FF195D39B4663759C0759846 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A36BA6974B30A1E9B2EA6EDD /* PBXTargetDependency */,
+			);
+			name = ECOdysseyEvaluations;
+			packageProductDependencies = (
+				E228A6ABFC4875670E7B23A5 /* SortingKit */,
+			);
+			productName = ECOdysseyEvaluations;
+			productReference = 5D0AC042349FD237EBCC28A9 /* ECOdysseyEvaluations.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -227,6 +298,9 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					6787BD2B9875051241E042DF = {
+						DevelopmentTeam = BD8SA4X398;
+					};
+					748878AE8FFB46FFD773AC73 = {
 						DevelopmentTeam = BD8SA4X398;
 					};
 				};
@@ -249,11 +323,33 @@
 			projectRoot = "";
 			targets = (
 				6787BD2B9875051241E042DF /* ECOdyssey */,
+				748878AE8FFB46FFD773AC73 /* ECOdysseyEvaluations */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		9B0B16B7484B7BF4DD704035 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3B31C0B7BD96348AEF3F3EF6 /* Photos in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		E011007655A50A3D6D4A5569 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB20AAB4121A642C9937B7EE /* BinRoutingEvaluation.swift in Sources */,
+				EC08EB5CF74C2E88EA917B41 /* BinRoutingEvaluationTests.swift in Sources */,
+				01E341E5AA0082616095F737 /* WastePhotoSample.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F2D7AE07ABCD7FD1A6C13915 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -270,6 +366,7 @@
 				ACE1438E05824082B738C01F /* ECOdysseyApp.swift in Sources */,
 				6E1E648F3156109387417E45 /* FoundationModelPerception.swift in Sources */,
 				5C92D5B1936D7A70F0FC92DB /* FrameBudget.swift in Sources */,
+				38FD88F49F2E23E2069A8439 /* GalleryScanScreen.swift in Sources */,
 				1919B9C82284B6125E9F99ED /* KioskLifecycle.swift in Sources */,
 				9668637BA2B4B44F6A55514C /* LegacyRecordImporter.swift in Sources */,
 				BC67DDB0A499A5C1B614C75E /* PerceptionFrame.swift in Sources */,
@@ -281,13 +378,23 @@
 				C336ADFA09D0682A989CB3BA /* ScannerScreen.swift in Sources */,
 				5B9D628A36014BD41FBED883 /* StartupFailureScreen.swift in Sources */,
 				A537691CB86AF61A786B9307 /* StationIdentity.swift in Sources */,
+				9C86B4594ED66FE4C445FC97 /* StillImageScanner.swift in Sources */,
 				1DAEB0683FCE1ADC3AC0CE9F /* ThroughputChart.swift in Sources */,
+				D2EB7BBCAF862FF8D0926A5C /* UprightImageDecoder.swift in Sources */,
 				878786C8937EC29AB5A67E87 /* VisionKeywordPerception.swift in Sources */,
 				203A8A858586090FAD0D28F1 /* VisionPresenceDetector.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A36BA6974B30A1E9B2EA6EDD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6787BD2B9875051241E042DF /* ECOdyssey */;
+			targetProxy = 50E5D0130228367CA11BE83C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		0474651907DF51F358291942 /* Release */ = {
@@ -345,6 +452,27 @@
 			};
 			name = Release;
 		};
+		626BEA93B808C33F88222409 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = BD8SA4X398;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.mohamedmorad.ECOdysseyEvaluations;
+				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ECOdyssey.app/ECOdyssey";
+			};
+			name = Debug;
+		};
 		97024D0A22669B77A8AA18E5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -352,10 +480,15 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = BD8SA4X398;
 				INFOPLIST_FILE = Sources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-weak_framework",
+					FoundationModels,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mohamedmorad.ECOdyssey;
 				SDKROOT = iphoneos;
@@ -364,6 +497,27 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
+		};
+		D7A087F7A41797266ADDCC24 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = BD8SA4X398;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.mohamedmorad.ECOdysseyEvaluations;
+				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ECOdyssey.app/ECOdyssey";
+			};
+			name = Release;
 		};
 		EA3AD9DA3A681AA164B62985 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -434,10 +588,15 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = BD8SA4X398;
 				INFOPLIST_FILE = Sources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-weak_framework",
+					FoundationModels,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mohamedmorad.ECOdyssey;
 				SDKROOT = iphoneos;
@@ -455,6 +614,15 @@
 			buildConfigurations = (
 				97024D0A22669B77A8AA18E5 /* Debug */,
 				F72B183096A23A5A6D197475 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		39BC9E6B8512DE781EE2C0A6 /* Build configuration list for PBXNativeTarget "ECOdysseyEvaluations" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				626BEA93B808C33F88222409 /* Debug */,
+				D7A087F7A41797266ADDCC24 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -479,6 +647,10 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		93A862A07C8CEB73F644F9E1 /* SortingKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SortingKit;
+		};
+		E228A6ABFC4875670E7B23A5 /* SortingKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SortingKit;
 		};

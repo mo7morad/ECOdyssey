@@ -33,7 +33,7 @@ struct WasteTrackerTests {
         for frame in 0..<10 {
             let events = tracker.ingest([det1], at: Double(frame) * 0.1)
             for event in events {
-                if case .confirmed(let id, _) = event { trackIDs.insert(id); totalConfirmed += 1 }
+                if case .confirmed(let id) = event { trackIDs.insert(id); totalConfirmed += 1 }
             }
         }
         // Gap: object 1 leaves (20 frames empty, beyond retire+grace)
@@ -44,7 +44,7 @@ struct WasteTrackerTests {
         for frame in 50..<60 {
             let events = tracker.ingest([det2], at: Double(frame) * 0.1)
             for event in events {
-                if case .confirmed(let id, _) = event { trackIDs.insert(id); totalConfirmed += 1 }
+                if case .confirmed(let id) = event { trackIDs.insert(id); totalConfirmed += 1 }
             }
         }
         #expect(totalConfirmed == 2)

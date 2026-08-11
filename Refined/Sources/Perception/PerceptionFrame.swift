@@ -1,30 +1,24 @@
 import CoreGraphics
 import SortingKit
 
-/// One item, isolated from the frame it was seen in, ready for perception.
+/// One photograph of one item, ready for perception.
+///
+/// Deliberately carries no bounding box. Perception used to be handed a crop taken from
+/// a video frame around a presence box, and that crop was the single largest cause of bad
+/// readings: an objectness-saliency box is coarse, is carried forward by the object
+/// tracker for several frames between detections, and can drift off the item entirely.
+/// Cropping to it fed a whole-scene classifier a keyhole — a bottle cropped to its label
+/// is a rectangle of colour — while the same item photographed whole was read correctly
+/// every time from the photo library.
+///
+/// Framing is now settled before this type exists: `CameraSession.captureStill()`
+/// photographs the scene, and presence boxes are used for what they are actually good at,
+/// which is drawing the overlay and deciding *when* to take that photograph.
 public struct PerceptionFrame: Sendable {
     public let image: CGImage
-    /// Normalised, in Vision's coordinate space (origin bottom-left).
-    public let boundingBox: CGRect
 
-    public init(image: CGImage, boundingBox: CGRect) {
+    public init(image: CGImage) {
         self.image = image
-        self.boundingBox = boundingBox
-    }
-
-    /// The item cropped out of the frame.
-    ///
-    /// Vision's origin is bottom-left and `CGImage`'s is top-left, so the box is
-    /// flipped vertically on the way in. Falls back to the full frame when the crop
-    /// cannot be made, since a whole-frame guess beats no answer at all.
-    public func croppedImage() -> CGImage {
-        let pixelRect = CGRect(
-            x: boundingBox.minX * CGFloat(image.width),
-            y: (1 - boundingBox.maxY) * CGFloat(image.height),
-            width: boundingBox.width * CGFloat(image.width),
-            height: boundingBox.height * CGFloat(image.height)
-        )
-        return image.cropping(to: pixelRect) ?? image
     }
 }
 

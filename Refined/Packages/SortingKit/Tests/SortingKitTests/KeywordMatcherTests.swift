@@ -46,6 +46,39 @@ struct KeywordMatcherTests {
         #expect(materials.isEmpty)
     }
     
+    @Test("The more specific keyword wins when two materials claim one label")
+    func moreSpecificKeywordOutranksBareToken() {
+        // "bottle" is deliberately a plastic hint so that Vision's bare "bottle" label
+        // matches something at all. A beer bottle must still come out as glass.
+        //
+        // Both materials match this label at the same confidence, so only the specificity
+        // tie-break separates them. Before it existed the winner came down to whichever
+        // way the hint dictionary happened to iterate, which varies per process — hence
+        // an explicit ordering rule rather than a repeated-run test, which would sample
+        // one seed many times and prove nothing.
+        let hints = ["pet_plastic": ["bottle"], "glass": ["beer bottle"]]
+
+        let materials = KeywordMatcher.findMaterials(
+            from: [(identifier: "beer_bottle", confidence: 0.6)],
+            using: hints
+        )
+
+        #expect(materials.first?.materialID == "glass")
+    }
+
+    @Test("A bare token matches a compound label")
+    func bareTokenMatchesCompoundLabel() {
+        // Vision emits "pop_bottle" and "soda_can" far more often than any phrase the
+        // hint table used to list, which is why most real items matched nothing.
+        let hints = ["pet_plastic": ["bottle"], "aluminium": ["can"]]
+        let materials = KeywordMatcher.findMaterials(
+            from: [(identifier: "pop_bottle", confidence: 0.4), (identifier: "soda_can", confidence: 0.3)],
+            using: hints
+        )
+
+        #expect(materials.map(\.materialID) == ["pet_plastic", "aluminium"])
+    }
+
     @Test("Multiple labels return ranked materials")
     func multipleLabelsReturnRankedMaterials() {
         let hints = ["organic": ["banana"], "recyclable": ["water bottle"]]

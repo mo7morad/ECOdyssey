@@ -8,15 +8,65 @@ import Foundation
 public enum SortingPolicy {
     /// Confidence below which a material is not trusted enough to act on.
     ///
-    /// Telling someone the wrong bin is worse than admitting uncertainty, so this sits
-    /// well above noise. Vision's generic classifier routinely emits sub-0.2 matches
-    /// for objects it has not really recognised. Calibrate against the soak test.
-    public static let defaultMinConfidence: Double = 0.25
+    /// This is a noise floor, not a certainty bar. It was set at 0.25 to keep the system
+    /// from asserting a bin it had not really recognised, but that reads Vision's scores
+    /// as probabilities when they are not: its general classifier scores a correctly
+    /// identified drink can at roughly 0.1, so the threshold rejected the true answer
+    /// far more often than a false one and the station said "Not sure" to almost
+    /// everything. Confidence still ranks materials against each other, and a weak
+    /// reading now surfaces as a hedged suggestion rather than a refusal — see
+    /// `PresentedDecision`. Calibrate against the soak test.
+    public static let defaultMinConfidence: Double = 0.05
 
+    /// Three passes, in this order, and the order is the policy:
+    ///
+    /// 1. **Hazards win outright.** A battery is still metal, and a material rule would
+    ///    happily file it as recyclable. Getting this wrong starts a fire in a truck,
+    ///    so it is settled before anything else gets a say.
+    /// 2. **Splits beat a single bin.** A greasy pizza box sorts correctly as residual,
+    ///    but answering "residual" throws away the clean lid. When the ruleset knows an
+    ///    item comes apart, the better answer is both halves.
+    /// 3. **Materials**, as before.
     public static func decide(
         _ perception: ItemPerception,
         using ruleset: SortingRuleset,
         minConfidence: Double = defaultMinConfidence
+    ) -> BinDecision {
+        if let hazard = hazardDecision(for: perception, using: ruleset) { return hazard }
+        if let split = splitDecision(for: perception, using: ruleset) { return split }
+        return materialDecision(for: perception, using: ruleset, minConfidence: minConfidence)
+    }
+
+    private static func hazardDecision(
+        for perception: ItemPerception,
+        using ruleset: SortingRuleset
+    ) -> BinDecision? {
+        guard let hazardClass = perception.hazardClass,
+              let rule = ruleset.hazardRules.first(where: { $0.hazardClass == hazardClass })
+        else { return nil }
+
+        return .hazard(HazardPlacement(
+            hazardClass: hazardClass,
+            binID: rule.binID,
+            matchedRule: rule.id,
+            instruction: rule.instruction
+        ))
+    }
+
+    private static func splitDecision(
+        for perception: ItemPerception,
+        using ruleset: SortingRuleset
+    ) -> BinDecision? {
+        guard let rule = ruleset.componentRules.first(where: { $0.matches(itemName: perception.itemName) })
+        else { return nil }
+
+        return .split(parts: rule.parts, matchedRule: rule.id)
+    }
+
+    private static func materialDecision(
+        for perception: ItemPerception,
+        using ruleset: SortingRuleset,
+        minConfidence: Double
     ) -> BinDecision {
         let trustedMaterials = perception.materials.filter { $0.confidence >= minConfidence }
 
@@ -29,7 +79,7 @@ public enum SortingPolicy {
         // barely-visible banana outvote an obvious plastic bottle.
         for material in trustedMaterials {
             let applicable = ruleset.rules.filter {
-                $0.materials.contains(material.materialID) && satisfies($0.requires, perception)
+                $0.covers(material.materialID) && satisfies($0.requires, perception)
             }
             guard let topPriority = applicable.map(\.priority).max() else { continue }
 
@@ -45,7 +95,13 @@ public enum SortingPolicy {
                 )
             }
 
-            return .sorted(binID: winner.binID, matchedRule: winner.id, confidence: material.confidence)
+            return .sorted(Placement(
+                binID: winner.binID,
+                matchedRule: winner.id,
+                confidence: material.confidence,
+                preparation: winner.preparation ?? [],
+                condition: winner.condition
+            ))
         }
 
         return .uncertain(candidates: [], reason: .noMatchingRule)
@@ -58,6 +114,11 @@ public enum SortingPolicy {
             return false
         }
         if let requiredComposite = requirements.isComposite, requiredComposite != perception.isComposite {
+            return false
+        }
+        // An unseen interior is not an empty one: comparing against the optional makes
+        // "could not tell" fail a rule that demands an emptied container.
+        if let requiredEmpty = requirements.isEmpty, requiredEmpty != perception.isEmpty {
             return false
         }
         return true

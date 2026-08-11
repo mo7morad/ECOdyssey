@@ -16,7 +16,10 @@ struct CameraPreviewView: UIViewRepresentable {
         view.previewLayer.session = session
         view.previewLayer.videoGravity = .resizeAspectFill
 
-        Task { @MainActor in
+        // Deferred because assigning a binding during `makeUIView` modifies state in the
+        // middle of a view update. Both captures are weak: a strong one here would
+        // outlive the view it is meant to be handing back.
+        Task { @MainActor [weak view] in
             boxMapper = { [weak view] normalisedBox in
                 guard let view else { return .zero }
                 return view.previewLayer.layerRectConverted(fromMetadataOutputRect: normalisedBox)

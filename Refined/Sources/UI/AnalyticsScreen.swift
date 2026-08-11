@@ -30,6 +30,7 @@ struct AnalyticsScreen: View {
                 }
 
                 headlineSection
+                recognitionSection
                 binBreakdownSection
                 throughputSection
                 historySection
@@ -50,6 +51,23 @@ struct AnalyticsScreen: View {
                 }
             }
             .task { await load() }
+        }
+    }
+
+    /// A station running the keyword tier looks identical to a working one from across
+    /// the room, and is markedly worse at its job. This is where an operator finds out
+    /// which tier they are actually getting, and why.
+    @ViewBuilder
+    private var recognitionSection: some View {
+        Section("Recognition") {
+            if let reason = FoundationModelPerception.unavailabilityReason {
+                LabeledContent("Tier", value: "Vision classifier")
+                Text(reason)
+                    .font(.footnote)
+                    .foregroundStyle(.orange)
+            } else {
+                LabeledContent("Tier", value: "On-device model")
+            }
         }
     }
 

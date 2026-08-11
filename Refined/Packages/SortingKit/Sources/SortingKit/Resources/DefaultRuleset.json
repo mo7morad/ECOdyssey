@@ -1,107 +1,343 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+
+  "_binsNote": "The system defines four waste streams: Organic, Recyclable, Hazardous, and Residual. Hazardous is a separate category — batteries, electronics, lamps, household chemicals — which is why hazardRules exist rather than a general_waste catch-all. Identifiers stay opaque while display names, phrases, and instructions are presented in English.",
 
   "bins": [
     {
-      "id": "organic",
+      "id": "organik",
       "displayName": "Organic",
       "colorHex": "#34C759",
-      "spokenPhrase": "Organic waste",
-      "guidance": "Food scraps, plants, and certified compostable packaging."
+      "spokenPhrase": "Organic bin",
+      "guidance": "Food scraps, fruit peels, leaves. Processed into compost."
     },
     {
-      "id": "recyclable",
+      "id": "anorganik",
       "displayName": "Recyclable",
-      "colorHex": "#0A84FF",
-      "spokenPhrase": "Clean recyclable",
-      "guidance": "Clean and dry plastic, metal, paper, cardboard and glass."
+      "colorHex": "#FFCC00",
+      "spokenPhrase": "Recyclable bin",
+      "guidance": "Clean and dry plastic, metal, paper, and glass."
     },
     {
-      "id": "residual",
+      "id": "b3",
+      "displayName": "Hazardous",
+      "colorHex": "#FF9500",
+      "spokenPhrase": "Hazardous waste box",
+      "guidance": "Hazardous materials. Never mix with regular waste."
+    },
+    {
+      "id": "residu",
       "displayName": "Residual",
       "colorHex": "#8E8E93",
-      "spokenPhrase": "Residual waste",
-      "guidance": "Everything else, plus anything soiled or made of bonded materials."
+      "spokenPhrase": "Residual bin",
+      "guidance": "Waste that cannot be recycled or composted."
     }
   ],
 
-  "fallbackBinID": "residual",
+  "fallbackBinID": "residu",
+  "spokenLocale": "en-US",
 
-  "diversionBinIDs": ["organic", "recyclable"],
-  "recyclingBinIDs": ["recyclable"],
+  "diversionBinIDs": ["organik", "anorganik"],
+  "recyclingBinIDs": ["anorganik"],
+
+  "_hazardRulesNote": "Checked before every material rule and winning outright. A battery is still metal, and a material rule would file it as recyclable — the cost of that is a fire in the collection truck, not a contaminated load. Every instruction says what to do, because 'B3' alone does not tell someone holding a vape where to put it.",
+
+  "hazardRules": [
+    {
+      "id": "hz_battery",
+      "hazardClass": "battery",
+      "binID": "b3",
+      "instruction": "Do not throw in regular bins. Batteries can catch fire when crushed. Place in hazardous box.",
+      "note": "Lithium cells vent and ignite when crushed in a truck or compactor. Vapes and power banks count here too."
+    },
+    {
+      "id": "hz_electronics",
+      "hazardClass": "electronics",
+      "binID": "b3",
+      "instruction": "Electronics belong in hazardous waste. Place in hazardous box or take to e-waste drop-off.",
+      "note": "E-waste leaches heavy metals; it also usually contains a cell, so it inherits the battery risk."
+    },
+    {
+      "id": "hz_lamp",
+      "hazardClass": "lamp",
+      "binID": "b3",
+      "instruction": "Light bulbs belong in hazardous waste. Do not break — place carefully in hazardous box.",
+      "note": "Fluorescent and CFL tubes carry mercury vapour."
+    },
+    {
+      "id": "hz_aerosol",
+      "hazardClass": "aerosol",
+      "binID": "b3",
+      "instruction": "Pressurised aerosol can. Place in hazardous box, do not crush.",
+      "note": "Pressurised even when it feels empty — it explodes in a compactor."
+    },
+    {
+      "id": "hz_chemical",
+      "hazardClass": "household_chemical",
+      "binID": "b3",
+      "instruction": "Chemicals belong in hazardous waste. Seal tightly, place in hazardous box.",
+      "note": "Paint, thinner, pesticide, bleach, motor oil."
+    },
+    {
+      "id": "hz_medicine",
+      "hazardClass": "medicine",
+      "binID": "b3",
+      "instruction": "Medicine belongs in hazardous waste. Do not flush down the drain.",
+      "note": "Pharmaceutical waste is hazardous and contaminates groundwater."
+    },
+    {
+      "id": "hz_sharps",
+      "hazardClass": "sharps",
+      "binID": "b3",
+      "instruction": "Sharp objects. Wrap securely first, then place in hazardous box.",
+      "note": "Protects whoever handles the waste downstream."
+    }
+  ],
+
+  "_componentRulesNote": "Only for items whose parts genuinely go to different bins. A bottle and its cap both end up in Recyclable, so splitting that would print two rows saying the same thing; it is not here. Matched on the item name with whole-token matching, using English keywords for both Foundation Models and Vision fallback tiers.",
+
+  "componentRules": [
+    {
+      "id": "cp_pizza_box",
+      "whenItemMatches": ["pizza box", "greasy pizza box"],
+      "parts": [
+        {
+          "name": "Greasy base",
+          "binID": "residu",
+          "preparation": ["Tear off greasy section"]
+        },
+        {
+          "name": "Clean lid",
+          "binID": "anorganik",
+          "preparation": ["Flatten box"]
+        }
+      ],
+      "note": "Grease disqualifies the paper stream but only touches the base. Answering 'residu' for the whole box throws away a recyclable half."
+    },
+    {
+      "id": "cp_coffee_cup",
+      "whenItemMatches": ["coffee cup", "paper cup", "takeaway cup"],
+      "parts": [
+        {
+          "name": "Paper cup (plastic lined)",
+          "binID": "residu",
+          "condition": "Inner plastic lining cannot be separated — not recyclable paper"
+        },
+        {
+          "name": "Plastic lid",
+          "binID": "anorganik",
+          "preparation": ["Remove lid"]
+        }
+      ],
+      "note": "The single most common recycling contaminant worldwide: it looks like paper and is not."
+    },
+    {
+      "id": "cp_takeaway_box",
+      "whenItemMatches": [
+        "takeaway box", "food container", "lunch box", "styrofoam box"
+      ],
+      "parts": [
+        {
+          "name": "Food residue",
+          "binID": "organik",
+          "preparation": ["Scrape out food residue first"]
+        },
+        {
+          "name": "Container",
+          "binID": "anorganik",
+          "preparation": ["Rinse briefly"],
+          "condition": "If container is styrofoam, dispose in Residual bin"
+        }
+      ],
+      "note": "Emptying the food out is what makes the container recyclable at all."
+    },
+    {
+      "id": "cp_nasi_bungkus",
+      "whenItemMatches": ["wrapped rice", "food wrap", "takeaway wrap"],
+      "parts": [
+        {
+          "name": "Food leftovers",
+          "binID": "organik"
+        },
+        {
+          "name": "Wrapper",
+          "binID": "residu",
+          "condition": "Greased paper and plastic wrap soiled by food cannot be recycled"
+        }
+      ],
+      "note": "Common takeaway case: greased paper plus an inner plastic layer, with food still in it."
+    }
+  ],
+
+  "_rulesNote": "Priorities: 100 base, 150 material-specific override, 200 soiled, 300 declared-composite material, 400 the composite property override. Rule cmp_bonded_override deliberately omits 'materials' so it applies whatever material the model named — see its note.",
 
   "rules": [
-    { "id": "food_waste",        "materials": ["food_waste"],                "binID": "organic",    "priority": 100 },
-    { "id": "plant_matter",      "materials": ["plant_matter"],              "binID": "organic",    "priority": 100 },
-    { "id": "compostable_ware",  "materials": ["compostable_packaging"],     "binID": "organic",    "priority": 100 },
+    { "id": "food_waste",       "materials": ["food_waste"],            "binID": "organik", "priority": 100 },
+    { "id": "plant_matter",     "materials": ["plant_matter"],          "binID": "organik", "priority": 100 },
+    { "id": "compostable_ware", "materials": ["compostable_packaging"], "binID": "organik", "priority": 100,
+      "condition": "Only if labelled compostable — regular plastic ruins compost" },
 
-    { "id": "clean_plastic",     "materials": ["pet_plastic", "hdpe_plastic"], "binID": "recyclable", "priority": 100,
-      "requires": { "foodSoiled": false } },
-    { "id": "soiled_plastic",    "materials": ["pet_plastic", "hdpe_plastic"], "binID": "residual",   "priority": 200,
+    { "id": "clean_pet",  "materials": ["pet_plastic"], "binID": "anorganik", "priority": 100,
+      "requires": { "foodSoiled": false },
+      "preparation": ["Empty and rinse", "Flatten bottle", "PET bottles are recyclable"] },
+    { "id": "clean_hdpe", "materials": ["hdpe_plastic"], "binID": "anorganik", "priority": 100,
+      "requires": { "foodSoiled": false },
+      "preparation": ["Empty and rinse"] },
+    { "id": "soiled_plastic", "materials": ["pet_plastic", "hdpe_plastic"], "binID": "residu", "priority": 200,
       "requires": { "foodSoiled": true },
-      "note": "Food residue contaminates the plastic stream." },
+      "condition": "If rinsed first, it can go to Recyclable",
+      "note": "Food residue contaminates the plastic stream, but rinsing genuinely recovers it — say so." },
 
-    { "id": "clean_metal",       "materials": ["aluminium", "steel"],        "binID": "recyclable", "priority": 100,
-      "requires": { "foodSoiled": false } },
-    { "id": "soiled_metal",      "materials": ["aluminium", "steel"],        "binID": "residual",   "priority": 200,
-      "requires": { "foodSoiled": true } },
-
-    { "id": "clean_paper",       "materials": ["paper"],                     "binID": "recyclable", "priority": 100,
-      "requires": { "foodSoiled": false } },
-    { "id": "soiled_paper",      "materials": ["paper"],                     "binID": "residual",   "priority": 200,
+    { "id": "clean_metal", "materials": ["aluminium", "steel"], "binID": "anorganik", "priority": 100,
+      "requires": { "foodSoiled": false },
+      "preparation": ["Rinse briefly", "Cans are recyclable"] },
+    { "id": "soiled_metal", "materials": ["aluminium", "steel"], "binID": "residu", "priority": 200,
       "requires": { "foodSoiled": true },
-      "note": "Napkins and paper towels are almost always soiled." },
+      "condition": "If rinsed first, it can go to Recyclable" },
 
-    { "id": "clean_cardboard",   "materials": ["cardboard"],                 "binID": "recyclable", "priority": 100,
+    { "id": "clean_paper", "materials": ["paper"], "binID": "anorganik", "priority": 100,
       "requires": { "foodSoiled": false } },
-    { "id": "soiled_cardboard",  "materials": ["cardboard"],                 "binID": "residual",   "priority": 200,
+    { "id": "soiled_paper", "materials": ["paper"], "binID": "residu", "priority": 200,
       "requires": { "foodSoiled": true },
-      "note": "Grease contaminates the paper stream — pizza boxes belong here." },
+      "note": "Tissue and paper towels are almost always soiled." },
+    { "id": "thermal_paper", "materials": ["thermal_paper"], "binID": "residu", "priority": 150,
+      "condition": "Receipts are thermal paper, not regular paper",
+      "note": "Thermal receipt stock is BPA-coated and contaminates the paper stream. It was previously matched as 'paper' and sent to recycling." },
 
-    { "id": "glass",             "materials": ["glass"],                     "binID": "recyclable", "priority": 100 },
+    { "id": "clean_cardboard", "materials": ["cardboard"], "binID": "anorganik", "priority": 100,
+      "requires": { "foodSoiled": false },
+      "preparation": ["Flatten box", "Cardboard is recyclable"] },
+    { "id": "soiled_cardboard", "materials": ["cardboard"], "binID": "residu", "priority": 200,
+      "requires": { "foodSoiled": true },
+      "note": "Grease contaminates the paper stream." },
 
-    { "id": "composite_item",    "materials": ["composite"],                 "binID": "residual",   "priority": 300,
+    { "id": "glass", "materials": ["glass"], "binID": "anorganik", "priority": 100,
+      "preparation": ["Empty and rinse"],
+      "condition": "If broken, wrap safely so sorters do not get hurt" },
+
+    { "id": "soft_plastic", "materials": ["soft_plastic"], "binID": "residu", "priority": 100,
+      "condition": "Single-use plastic bags jam sorting machinery",
+      "note": "Film jams sorting machinery everywhere." },
+    { "id": "polystyrene", "materials": ["polystyrene"], "binID": "residu", "priority": 100,
+      "condition": "Styrofoam cannot be recycled" },
+    { "id": "plastic_straw", "materials": ["plastic_straw"], "binID": "residu", "priority": 100,
+      "condition": "Plastic straws cannot be recycled" },
+
+    { "id": "composite_material", "materials": ["composite"], "binID": "residu", "priority": 300 },
+    { "id": "cmp_bonded_override", "binID": "residu", "priority": 400,
       "requires": { "isComposite": true },
-      "note": "Bonded materials such as lined coffee cups cannot be separated by hand." },
-    { "id": "soft_plastic",      "materials": ["soft_plastic"],              "binID": "residual",   "priority": 100,
-      "note": "Bags and film jam sorting machinery." },
-    { "id": "polystyrene",       "materials": ["polystyrene"],               "binID": "residual",   "priority": 100 },
-    { "id": "general_waste",     "materials": ["general_waste"],             "binID": "residual",   "priority": 100 }
+      "condition": "Bonded materials cannot be separated by hand",
+      "note": "No 'materials' key on purpose, so it applies to whatever material was named. Fixes the case where a PE-lined cup reported as 'paper' with isComposite true matched clean_paper and was sent to recycling — isComposite was dead for every material except 'composite' itself. Regression test: bondedItemOverridesItsPrimaryMaterial." },
+
+    { "id": "general_waste", "materials": ["general_waste"], "binID": "residu", "priority": 100 }
   ],
+
+  "_hazardKeywordHintsNote": "The Vision fallback tier cannot report a hazard class the way the language model can, and a device without Apple Intelligence must still refuse to put a battery in a bin. These give that tier the same interception by keyword. English only — they match Vision's own label taxonomy, not what a person would say.",
+
+  "hazardKeywordHints": {
+    "battery": [
+      "battery", "batteries", "aa battery", "aaa battery", "button cell", "coin cell",
+      "power bank", "powerbank", "vape", "e cigarette", "electronic cigarette", "accu"
+    ],
+    "electronics": [
+      "charger", "cable", "usb cable", "headphone", "earphone", "earbud", "cellphone",
+      "mobile phone", "smartphone", "laptop", "remote control", "circuit board",
+      "keyboard", "computer mouse", "adapter", "hard disk"
+    ],
+    "lamp": [
+      "lightbulb", "light bulb", "bulb", "lamp", "fluorescent", "fluorescent tube",
+      "led bulb", "neon tube", "halogen"
+    ],
+    "aerosol": [
+      "aerosol", "aerosol can", "spray can", "spray paint", "hairspray",
+      "deodorant spray", "insect spray", "air freshener"
+    ],
+    "household_chemical": [
+      "paint", "paint can", "paint bucket", "pesticide", "insecticide", "bleach",
+      "motor oil", "engine oil", "solvent", "thinner", "turpentine", "fertilizer"
+    ],
+    "medicine": [
+      "medicine", "medication", "pill", "pill bottle", "blister pack", "tablet strip",
+      "drug", "ointment tube", "vial"
+    ],
+    "sharps": [
+      "syringe", "needle", "razor", "razor blade", "scalpel", "lancet", "blade"
+    ]
+  },
+
+  "_visionKeywordHintsNote": "Matched on whole tokens, never substrings, so 'can' cannot match 'toucan'. Bare one-word keywords are deliberate: Vision's taxonomy emits 'bottle' and 'can' far more often than any two-word phrase, and without them most real items matched nothing at all. Where a bare word and a specific phrase both match a label, the longer phrase wins, so 'beer bottle' lands in glass rather than plastic. English only, for the same reason as the hazard hints.",
 
   "visionKeywordHints": {
     "food_waste": [
-      "banana", "apple", "orange", "bread", "pizza", "sandwich", "burger", "hotdog",
-      "broccoli", "carrot", "cucumber", "lemon", "strawberry", "pineapple", "corn",
-      "mushroom", "bagel", "pretzel", "cheeseburger", "meat loaf", "eggshell",
-      "coffee grounds", "banana peel", "apple core", "orange peel"
+      "food", "fruit", "vegetable", "produce", "leftovers", "meal", "snack",
+      "banana", "apple", "orange", "lemon", "lime", "pear", "peach", "plum", "grape",
+      "melon", "watermelon", "pineapple", "strawberry", "berry", "mango", "kiwi",
+      "papaya", "jackfruit", "coconut", "coconut shell", "durian",
+      "bread", "toast", "bagel", "pretzel", "croissant", "pastry", "cake", "cookie",
+      "donut", "doughnut", "pizza", "sandwich", "burger", "cheeseburger", "hotdog",
+      "taco", "burrito", "pasta", "noodle", "rice", "soup", "salad", "cereal",
+      "broccoli", "carrot", "cucumber", "corn", "mushroom", "potato", "tomato",
+      "onion", "pepper", "lettuce", "cabbage", "avocado", "bean", "pea", "chili",
+      "meat", "chicken", "fish", "egg", "eggshell", "cheese", "yoghurt", "yogurt",
+      "peel", "rind", "core", "bone", "coffee grounds", "tea bag",
+      "banana peel", "apple core", "orange peel"
     ],
-    "plant_matter": ["flower", "leaf", "plant", "daisy", "rose", "potted plant"],
+    "plant_matter": [
+      "flower", "leaf", "leaves", "plant", "daisy", "rose", "potted plant",
+      "grass", "twig", "branch", "soil", "moss", "fern", "bouquet",
+      "palm leaf", "banana leaf", "frangipani", "offering"
+    ],
     "pet_plastic": [
-      "water bottle", "pop bottle", "soda bottle", "plastic bottle", "sports bottle",
-      "shampoo bottle", "detergent bottle", "milk jug"
+      "bottle", "water bottle", "pop bottle", "soda bottle", "plastic bottle",
+      "sports bottle", "shampoo bottle", "detergent bottle", "milk jug", "jug",
+      "soda", "cola", "beverage"
     ],
-    "hdpe_plastic": ["plastic container", "tupperware", "yoghurt pot", "plastic tub"],
+    "hdpe_plastic": [
+      "plastic container", "tupperware", "yoghurt pot", "yogurt pot", "plastic tub",
+      "container", "tub", "canister", "bucket", "jerrycan",
+      "bottle cap", "cap", "lid", "plastic lid"
+    ],
     "soft_plastic": [
-      "plastic bag", "shopping bag", "wrapper", "cling film", "packet", "sachet",
-      "bubble wrap", "plastic wrap"
+      "plastic bag", "shopping bag", "bag", "wrapper", "wrap", "cling film", "film",
+      "packet", "sachet", "bubble wrap", "plastic wrap", "pouch", "sack"
     ],
-    "polystyrene": ["styrofoam", "foam cup", "polystyrene"],
+    "polystyrene": ["styrofoam", "foam cup", "polystyrene", "foam", "packing peanut", "foam box"],
+    "plastic_straw": ["straw", "drinking straw", "plastic straw", "stirrer"],
     "aluminium": [
-      "beer can", "soda can", "pop can", "tin can", "aluminium can", "aluminum can",
-      "drink can", "aluminium foil", "aluminum foil", "tinfoil"
+      "can", "beer can", "soda can", "pop can", "tin can", "aluminium can",
+      "aluminum can", "drink can", "aluminium foil", "aluminum foil", "tinfoil",
+      "foil", "aluminium", "aluminum", "soda pop"
     ],
-    "steel": ["food can", "soup can", "steel can", "aerosol can", "bottle cap"],
+    "steel": [
+      "food can", "soup can", "steel can", "tin", "nail", "screw", "wire",
+      "cutlery", "fork", "spoon", "knife", "metal lid"
+    ],
     "paper": [
-      "newspaper", "magazine", "envelope", "notebook", "paper", "receipt", "flyer",
-      "paper towel", "napkin", "tissue", "menu"
+      "paper", "newspaper", "magazine", "envelope", "notebook", "book",
+      "flyer", "leaflet", "poster", "letter", "document", "page", "sheet",
+      "paper towel", "napkin", "tissue", "menu", "ticket", "wrapping paper"
     ],
-    "cardboard": ["carton", "cardboard", "packet box", "shipping box", "cereal box", "egg carton"],
+    "thermal_paper": ["receipt", "till receipt", "sales receipt"],
+    "cardboard": [
+      "cardboard", "carton", "box", "packet box", "shipping box", "cereal box",
+      "egg carton", "corrugated", "packaging", "crate"
+    ],
     "glass": [
-      "wine bottle", "beer bottle", "glass bottle", "jar", "mason jar", "drinking glass",
-      "goblet", "beaker"
+      "glass", "wine bottle", "beer bottle", "glass bottle", "jar", "mason jar",
+      "drinking glass", "goblet", "beaker", "wineglass", "tumbler", "vase", "flask",
+      "bottle glass", "jam jar"
     ],
-    "composite": ["coffee cup", "paper cup", "takeaway cup", "juice box", "drink carton", "toothpaste tube"],
-    "general_waste": ["cigarette", "chewing gum", "battery", "pen", "toothbrush", "sponge", "rubber glove"]
+    "composite": [
+      "coffee cup", "paper cup", "takeaway cup", "cup", "juice box", "drink carton",
+      "milk carton", "toothpaste tube", "tube", "crisp packet",
+      "coffee pod", "capsule", "sachet pouch"
+    ],
+    "general_waste": [
+      "cigarette", "chewing gum", "pen", "pencil", "toothbrush", "sponge",
+      "rubber glove", "glove", "mask", "diaper", "nappy", "lighter",
+      "ceramic", "mug", "plate", "bowl", "dish",
+      "toy", "shoe", "clothing", "fabric", "textile", "cloth", "rag", "rope",
+      "candle", "sandal", "flip flop"
+    ]
   }
 }

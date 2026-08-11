@@ -52,7 +52,7 @@ swiftlint
 
 **Xcode 27 is required, not optional.** Command Line Tools alone can *compile* `SortingKit` with the plugin flag above, but cannot *run* Swift Testing — the CLT `Testing.framework` is missing `lib_TestingInterop.dylib` — and `swiftlint` needs `sourcekitd` from Xcode. Anything touching the app target needs the iOS SDK regardless.
 
-**Requirements:** Swift 6.4+, Xcode 27 (iOS 27 SDK). Deployment target iOS 26. `SWIFT_STRICT_CONCURRENCY: complete` is on — never silence a concurrency diagnostic with `@unchecked Sendable` or `nonisolated(unsafe)`. Those hide exactly the races the setting exists to catch.
+**Requirements:** Swift 6.4+, Xcode 27 (iOS 27 SDK). **Deployment target iOS 27.0** — `Attachment`, `OCRTool` and `BarcodeReaderTool` are all iOS 27+, and `Package.swift` requires `.iOS("27.0")`. The app target must also carry `OTHER_LDFLAGS = -weak_framework FoundationModels`; `project.yml` and `project.pbxproj` both set it, and dropping it crashes the app on launch on device (see `FoundationModelPerception.isImageInputLinked`). `SWIFT_STRICT_CONCURRENCY: complete` is on — never silence a concurrency diagnostic with `@unchecked Sendable` or `nonisolated(unsafe)`. Those hide exactly the races the setting exists to catch.
 
 ---
 

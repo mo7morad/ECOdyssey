@@ -6,7 +6,7 @@ import PackageDescription
 // simulator. iOS is the shipping platform.
 let package = Package(
     name: "SortingKit",
-    platforms: [.iOS("26.0"), .macOS(.v14)],
+    platforms: [.iOS("27.0"), .macOS(.v14)],
     products: [
         .library(name: "SortingKit", targets: ["SortingKit"]),
     ],

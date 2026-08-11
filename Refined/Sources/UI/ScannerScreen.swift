@@ -9,6 +9,7 @@ struct ScannerScreen: View {
     @State private var permission: CameraPermission = .undetermined
     @State private var boxMapper: (CGRect) -> CGRect = { $0 }
     @State private var isShowingAnalytics = false
+    @State private var isShowingGallery = false
 
     private var coordinator: ScanCoordinator { environment.coordinator }
 
@@ -27,6 +28,9 @@ struct ScannerScreen: View {
         .sheet(isPresented: $isShowingAnalytics) {
             AnalyticsScreen(eventStore: environment.eventStore, ruleset: environment.ruleset)
         }
+        .sheet(isPresented: $isShowingGallery) {
+            GalleryScanScreen(scanner: environment.stillImageScanner)
+        }
     }
 
     private var scannerContent: some View {
@@ -36,24 +40,18 @@ struct ScannerScreen: View {
 
             BinOverlay(
                 boxes: coordinator.trackedBoxes,
-                highlight: coordinator.latestDecision?.bin,
+                highlight: coordinator.latestDecision?.suggestedBin,
                 mapBox: boxMapper
             )
             .ignoresSafeArea()
 
             VStack {
-                HStack {
+                HStack(spacing: 12) {
                     Spacer()
-                    Button {
-                        isShowingAnalytics = true
-                    } label: {
-                        Image(systemName: "chart.bar.fill")
-                            .font(.title3)
-                            .padding(12)
-                            .background(.thinMaterial, in: Circle())
-                    }
-                    .padding()
+                    stationButton("photo.on.rectangle") { isShowingGallery = true }
+                    stationButton("chart.bar.fill") { isShowingAnalytics = true }
                 }
+                .padding()
 
                 Spacer()
 
@@ -61,6 +59,15 @@ struct ScannerScreen: View {
                     .padding(.horizontal)
                     .padding(.bottom, 40)
             }
+        }
+    }
+
+    private func stationButton(_ systemImage: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: systemImage)
+                .font(.title3)
+                .padding(12)
+                .background(.thinMaterial, in: Circle())
         }
     }
 

@@ -13,8 +13,6 @@ struct Track: Sendable, Equatable {
     let id: TrackID
     var state: TrackState
     var lastDetection: Detection
-    /// Best-quality detection seen so far; the crop handed to perception on confirmation.
-    var bestQualityDetection: Detection
     /// Cumulative, not consecutive — an item that flickers in and out still
     /// accumulates towards confirmation as long as it is re-associated in time.
     var framesSeen: Int
@@ -25,7 +23,6 @@ struct Track: Sendable, Equatable {
         self.id = TrackID()
         self.state = .pending
         self.lastDetection = detection
-        self.bestQualityDetection = detection
         self.framesSeen = 1
         self.framesMissing = 0
         self.lastSeenTimestamp = timestamp

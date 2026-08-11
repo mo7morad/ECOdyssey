@@ -8,7 +8,10 @@ targets:
   ECOdyssey:
     type: application
     platform: iOS
-    deploymentTarget: "26.0"
+    # 27.0, not 26.0: `Attachment` — the image-prompt type the whole Foundation Models
+    # tier is built on — is iOS 27+, as are OCRTool and BarcodeReaderTool, and
+    # Package.swift already requires .iOS("27.0").
+    deploymentTarget: "27.0"
     sources: [Sources]
     dependencies:
       - package: SortingKit
@@ -21,6 +24,12 @@ targets:
         TARGETED_DEVICE_FAMILY: "1,2"
         DEVELOPMENT_TEAM: BD8SA4X398
         CODE_SIGN_IDENTITY: "iPhone Developer"
+        # Weak-linked deliberately. A shipping iOS 27 build can be newer than the SDK
+        # and still not export the image-attachment initialiser; weak linking resolves
+        # the missing symbol to null instead of failing the process in dyld at launch,
+        # and FoundationModelPerception.isAvailable then refuses to call through it.
+        # Dropping this flag crashes the app on launch on real hardware.
+        OTHER_LDFLAGS: ["$(inherited)", "-weak_framework", "FoundationModels"]
     info:
       path: Sources/Info.plist
       properties:
@@ -33,3 +42,41 @@ targets:
           - UIInterfaceOrientationLandscapeRight
         UIRequiresFullScreen: true
         NSCameraUsageDescription: "ECOdyssey identifies waste items live to tell you which bin to use. Images are analysed on this device and are never saved or sent anywhere."
+
+  # Offline accuracy measurement against labelled photos. Not a unit test and not for
+  # CI: it runs the real on-device model, so its results move with the OS, the hardware
+  # and Apple's own model updates. Run it deliberately, on a device.
+  ECOdysseyEvaluations:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "27.0"
+    sources:
+      - path: Evaluations
+        excludes: ["Photos"]
+      # A folder reference, so `Photos/` survives as a subdirectory inside the bundle
+      # instead of being flattened into its root, where the loader could not find it.
+      - path: Evaluations/Photos
+        type: folder
+    dependencies:
+      - target: ECOdyssey
+      - package: SortingKit
+    settings:
+      base:
+        SWIFT_VERSION: "6.0"
+        SWIFT_STRICT_CONCURRENCY: complete
+        GENERATE_INFOPLIST_FILE: true
+        DEVELOPMENT_TEAM: BD8SA4X398
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/ECOdyssey.app/ECOdyssey"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+
+schemes:
+  ECOdyssey:
+    build:
+      targets:
+        ECOdyssey: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - ECOdysseyEvaluations

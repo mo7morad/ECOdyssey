@@ -76,14 +76,10 @@ public struct WasteTracker: Sendable {
         tracks[index].lastDetection = detection
         tracks[index].lastSeenTimestamp = timestamp
 
-        if detection.quality > tracks[index].bestQualityDetection.quality {
-            tracks[index].bestQualityDetection = detection
-        }
-
         switch tracks[index].state {
         case .pending where tracks[index].framesSeen >= configuration.framesToConfirm:
             tracks[index].state = .confirmed
-            events.append(.confirmed(tracks[index].id, confirmationFrame: tracks[index].bestQualityDetection))
+            events.append(.confirmed(tracks[index].id))
         case .retiring:
             // The same item reappearing inside the grace window. Deliberately silent:
             // re-confirming here would double-count an item that was merely occluded.

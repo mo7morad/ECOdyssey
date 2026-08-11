@@ -13,3 +13,21 @@ targets:
         INFOPLIST_KEY_NSCameraUsageDescription: "FirstMVP analyses waste items live on this device to suggest the correct bin."
         INFOPLIST_KEY_NSPhotoLibraryUsageDescription: "FirstMVP can classify a waste item from a photo you select."
         INFOPLIST_KEY_UILaunchScreen_Generation: true
+
+  FirstMVPTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources: [Tests]
+    dependencies:
+      - target: FirstMVP
+
+schemes:
+  FirstMVP:
+    build:
+      targets:
+        FirstMVP: all
+        FirstMVPTests: [test]
+    test:
+      targets:
+        - FirstMVPTests
