@@ -42,6 +42,12 @@ public struct AnalyticsView: View {
                 systemIconName: "leaf.fill",
                 accentColor: .green
             )
+            StatCardView(
+                titleText: "CARBON SAVED",
+                valueText: "\(analyticsStore.totalCarbonSavedGrams)g",
+                systemIconName: "leaf.arrow.circlepath",
+                accentColor: .blue
+            )
         }
     }
 
@@ -57,20 +63,32 @@ public struct AnalyticsView: View {
             VStack(spacing: 8) {
                 LegendRowView(
                     bulletColor: .green,
-                    labelText: "Organic Bin (Food Scraps)",
-                    itemCount: analyticsStore.count(for: .organic),
+                    labelText: "Organic (Food Scraps)",
+                    itemCount: analyticsStore.count(for: .organik),
+                    totalCount: analyticsStore.totalCount
+                )
+                LegendRowView(
+                    bulletColor: .yellow,
+                    labelText: "Inorganic (Plastic, Metal, Glass)",
+                    itemCount: analyticsStore.count(for: .anorganik),
                     totalCount: analyticsStore.totalCount
                 )
                 LegendRowView(
                     bulletColor: .blue,
-                    labelText: "Recyclable Bin (Plastic, Metal, Paper, Glass)",
-                    itemCount: analyticsStore.count(for: .recyclable),
+                    labelText: "Paper (Cardboard, Paper)",
+                    itemCount: analyticsStore.count(for: .kertas),
+                    totalCount: analyticsStore.totalCount
+                )
+                LegendRowView(
+                    bulletColor: .red,
+                    labelText: "Hazardous (Batteries, E-Waste)",
+                    itemCount: analyticsStore.count(for: .b3),
                     totalCount: analyticsStore.totalCount
                 )
                 LegendRowView(
                     bulletColor: .gray,
-                    labelText: "Residual Bin (Trash)",
-                    itemCount: analyticsStore.count(for: .residual),
+                    labelText: "Residual (General Trash)",
+                    itemCount: analyticsStore.count(for: .residu),
                     totalCount: analyticsStore.totalCount
                 )
             }
@@ -83,15 +101,19 @@ public struct AnalyticsView: View {
     private var progressBar: some View {
         GeometryReader { geo in
             let total = CGFloat(max(analyticsStore.totalCount, 1))
-            let organicW = geo.size.width * CGFloat(analyticsStore.count(for: .organic)) / total
-            let recyclableW = geo.size.width * CGFloat(analyticsStore.count(for: .recyclable)) / total
-            let residualW = geo.size.width * CGFloat(analyticsStore.count(for: .residual)) / total
+            let organikW = geo.size.width * CGFloat(analyticsStore.count(for: .organik)) / total
+            let anorganikW = geo.size.width * CGFloat(analyticsStore.count(for: .anorganik)) / total
+            let kertasW = geo.size.width * CGFloat(analyticsStore.count(for: .kertas)) / total
+            let b3W = geo.size.width * CGFloat(analyticsStore.count(for: .b3)) / total
+            let residuW = geo.size.width * CGFloat(analyticsStore.count(for: .residu)) / total
 
             HStack(spacing: 2) {
                 if analyticsStore.totalCount > 0 {
-                    Rectangle().fill(Color.green).frame(width: organicW)
-                    Rectangle().fill(Color.blue).frame(width: recyclableW)
-                    Rectangle().fill(Color.gray).frame(width: residualW)
+                    Rectangle().fill(Color.green).frame(width: organikW)
+                    Rectangle().fill(Color.yellow).frame(width: anorganikW)
+                    Rectangle().fill(Color.blue).frame(width: kertasW)
+                    Rectangle().fill(Color.red).frame(width: b3W)
+                    Rectangle().fill(Color.gray).frame(width: residuW)
                 } else {
                     Rectangle().fill(Color.secondary.opacity(0.2))
                 }
@@ -148,9 +170,17 @@ public struct AnalyticsView: View {
 
                         Spacer()
 
-                        Text(record.timestamp, style: .time)
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
+                        VStack(alignment: .trailing, spacing: 2) {
+                            if record.carbonSavedGrams > 0 {
+                                Text("-\(record.carbonSavedGrams)g CO₂")
+                                    .font(.caption2)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.green)
+                            }
+                            Text(record.timestamp, style: .time)
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                        }
                     }
                     .padding(.vertical, 8)
                     Divider()
@@ -165,7 +195,9 @@ public struct AnalyticsView: View {
     private func color(for name: String) -> Color {
         switch name {
         case "green": return .green
+        case "yellow": return .yellow
         case "blue": return .blue
+        case "red": return .red
         default: return .gray
         }
     }

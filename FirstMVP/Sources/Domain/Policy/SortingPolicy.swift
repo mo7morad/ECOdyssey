@@ -4,17 +4,14 @@ public struct SortingPolicy: Sendable {
     public static let organicKeywords: Set<String> = [
         "food", "fruit", "vegetable", "banana", "apple", "bread", "meat", "plant",
         "flower", "leaf", "compost", "produce", "citrus", "berry", "orange", "potato",
-        "seed", "nut", "grape", "tomato", "salad"
+        "seed", "nut", "grape", "tomato", "salad", "wood"
     ]
 
-    public static let plasticKeywords: Set<String> = [
+    public static let anorganicKeywords: Set<String> = [
         "plastic", "bottle", "water_bottle", "pop_bottle", "wrapper", "container",
-        "tub", "bag", "polyester", "styrofoam", "drinking_straw", "shampoo_bottle"
-    ]
-
-    public static let metalKeywords: Set<String> = [
+        "tub", "bag", "polyester", "styrofoam", "drinking_straw", "shampoo_bottle",
         "can", "tin", "aluminum", "foil", "metal", "beer_can", "soda_can",
-        "brass", "steel", "aerosol"
+        "brass", "steel", "glass", "wine_bottle", "jar", "beer_bottle", "goblet"
     ]
 
     public static let paperKeywords: Set<String> = [
@@ -22,8 +19,9 @@ public struct SortingPolicy: Sendable {
         "magazine", "paper_towel", "book"
     ]
 
-    public static let glassKeywords: Set<String> = [
-        "glass", "wine_bottle", "jar", "beer_bottle", "goblet", "flasket"
+    public static let b3Keywords: Set<String> = [
+        "battery", "electronic", "phone", "circuit", "bulb", "lamp", "chemical",
+        "syringe", "medicine", "pill", "paint", "aerosol"
     ]
 
     public init() {}
@@ -33,15 +31,19 @@ public struct SortingPolicy: Sendable {
         let materialLower = perception.materialName.lowercased()
 
         if matches(label: labelLower, material: materialLower, keywords: Self.organicKeywords) {
-            return .organic
+            return .organik
         }
-        if matches(label: labelLower, material: materialLower, keywords: Self.plasticKeywords)
-            || matches(label: labelLower, material: materialLower, keywords: Self.metalKeywords)
-            || matches(label: labelLower, material: materialLower, keywords: Self.paperKeywords)
-            || matches(label: labelLower, material: materialLower, keywords: Self.glassKeywords) {
-            return .recyclable
+        if matches(label: labelLower, material: materialLower, keywords: Self.b3Keywords) {
+            return .b3
         }
-        return .residual
+        if matches(label: labelLower, material: materialLower, keywords: Self.paperKeywords) {
+            return .kertas
+        }
+        if matches(label: labelLower, material: materialLower, keywords: Self.anorganicKeywords) {
+            return .anorganik
+        }
+        
+        return .residu
     }
 
     private func matches(label: String, material: String, keywords: Set<String>) -> Bool {

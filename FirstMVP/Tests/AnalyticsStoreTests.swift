@@ -7,19 +7,23 @@ struct AnalyticsStoreTests {
         let store = AnalyticsStore()
         store.clearHistory()
 
-        store.appendRecord(objectName: "Apple", materialName: "Organic", binID: .organic)
-        store.appendRecord(objectName: "Can", materialName: "Metal", binID: .recyclable)
-        store.appendRecord(objectName: "Wrapper", materialName: "Trash", binID: .residual)
+        store.appendRecord(objectName: "Apple", materialName: "Organic", binID: .organik)
+        store.appendRecord(objectName: "Bottle", materialName: "Plastic", binID: .anorganik)
+        store.appendRecord(objectName: "Box", materialName: "Cardboard", binID: .kertas)
+        store.appendRecord(objectName: "Battery", materialName: "Hazardous", binID: .b3)
+        store.appendRecord(objectName: "Wrapper", materialName: "Trash", binID: .residu)
 
-        #expect(store.totalCount == 3)
-        #expect(store.count(for: .organic) == 1)
-        #expect(store.count(for: .recyclable) == 1)
-        #expect(store.count(for: .residual) == 1)
+        #expect(store.totalCount == 5)
+        #expect(store.count(for: .organik) == 1)
+        #expect(store.count(for: .anorganik) == 1)
+        #expect(store.count(for: .kertas) == 1)
+        #expect(store.count(for: .b3) == 1)
+        #expect(store.count(for: .residu) == 1)
 
-        // Diversion rate = (organic 1 + recyclable 1) / 3 = 66%
-        #expect(store.diversionRatePercentage == 66)
+        // Diversion rate = (organik 1 + anorganik 1 + kertas 1) / 5 = 60%
+        #expect(store.diversionRatePercentage == 60)
 
-        // Recycling rate = recyclable 1 / 3 = 33%
-        #expect(store.recyclingRatePercentage == 33)
+        // Carbon Saved = organik (50) + anorganik (200) + kertas (100) = 350
+        #expect(store.totalCarbonSavedGrams == 350)
     }
 }

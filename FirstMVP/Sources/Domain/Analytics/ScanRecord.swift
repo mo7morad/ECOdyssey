@@ -6,6 +6,7 @@ public struct ScanRecord: Identifiable, Codable, Equatable, Sendable {
     public let objectName: String
     public let materialName: String
     public let binIDRaw: String
+    public let carbonSavedGrams: Int
 
     public var binID: BinID {
         BinID(rawValue: binIDRaw)
@@ -16,12 +17,14 @@ public struct ScanRecord: Identifiable, Codable, Equatable, Sendable {
         timestamp: Date = Date(),
         objectName: String,
         materialName: String,
-        binID: BinID
+        binID: BinID,
+        carbonSavedGrams: Int = 0
     ) {
         self.id = id
         self.timestamp = timestamp
         self.objectName = objectName
         self.materialName = materialName
         self.binIDRaw = binID.rawValue
+        self.carbonSavedGrams = carbonSavedGrams
     }
 }

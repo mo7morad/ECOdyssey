@@ -7,9 +7,12 @@ public struct BinID: RawRepresentable, Hashable, Codable, Sendable, CustomString
         self.rawValue = rawValue
     }
 
-    public static let organic = BinID(rawValue: "organic")
-    public static let recyclable = BinID(rawValue: "recyclable")
-    public static let residual = BinID(rawValue: "residual")
+    public static let organik = BinID(rawValue: "organik")
+    public static let anorganik = BinID(rawValue: "anorganik")
+    public static let kertas = BinID(rawValue: "kertas")
+    public static let b3 = BinID(rawValue: "b3")
+    public static let residu = BinID(rawValue: "residu")
+    
     public static let retired = BinID(rawValue: "retired")
 
     public var description: String {

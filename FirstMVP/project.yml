@@ -21,6 +21,9 @@ targets:
     sources: [Tests]
     dependencies:
       - target: FirstMVP
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: true
 
 schemes:
   FirstMVP:

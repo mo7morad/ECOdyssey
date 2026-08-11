@@ -24,7 +24,16 @@ public final class SpeechAnnouncer {
         synthesizer.stopSpeaking(at: .immediate)
         let utterance = AVSpeechUtterance(string: text)
         utterance.rate = AVSpeechUtteranceDefaultSpeechRate * 0.95
-        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        
+        let voices = AVSpeechSynthesisVoice.speechVoices()
+        if let premiumVoice = voices.first(where: { $0.language.starts(with: "en") && $0.quality == .premium }) {
+            utterance.voice = premiumVoice
+        } else if let enhancedVoice = voices.first(where: { $0.language.starts(with: "en") && $0.quality == .enhanced }) {
+            utterance.voice = enhancedVoice
+        } else {
+            utterance.voice = AVSpeechSynthesisVoice(language: "en-GB") ?? AVSpeechSynthesisVoice(language: "en-US")
+        }
+        
         synthesizer.speak(utterance)
     }
 }

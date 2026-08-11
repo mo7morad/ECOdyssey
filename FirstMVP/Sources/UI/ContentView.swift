@@ -173,6 +173,8 @@ public struct ContentView: View {
         switch name {
         case "green": return .green
         case "blue": return .blue
+        case "yellow": return .yellow
+        case "red": return .red
         default: return .gray
         }
     }

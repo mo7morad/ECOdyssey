@@ -25,29 +25,45 @@ public struct Bin: Identifiable, Hashable, Sendable {
     }
 
     public static let predefinedBins: [BinID: Bin] = [
-        .organic: Bin(
-            id: .organic,
-            displayName: "Organic Waste",
+        .organik: Bin(
+            id: .organik,
+            displayName: "Organic (Green)",
             emoji: "🟢",
             colorName: "green",
             spokenText: "Organic waste. Put in Green Bin.",
-            summary: "Compostable organic matter (food scraps, fruit, vegetables, plants)."
+            summary: "Food scraps, leaves, vegetables, and compostable organic matter."
         ),
-        .recyclable: Bin(
-            id: .recyclable,
-            displayName: "Recyclable Waste",
+        .anorganik: Bin(
+            id: .anorganik,
+            displayName: "Inorganic (Yellow)",
+            emoji: "🟡",
+            colorName: "yellow",
+            spokenText: "Inorganic waste. Put in Yellow Bin.",
+            summary: "Recyclable plastic bottles, metal cans, containers, and glass."
+        ),
+        .kertas: Bin(
+            id: .kertas,
+            displayName: "Paper (Blue)",
             emoji: "🔵",
             colorName: "blue",
-            spokenText: "Recyclable. Put in Blue Bin.",
-            summary: "Clean recyclable materials (plastic bottles, aluminum cans, cardboard, paper, glass)."
+            spokenText: "Paper waste. Put in Blue Bin.",
+            summary: "Paper, cardboard, newspapers, and packaging."
         ),
-        .residual: Bin(
-            id: .residual,
-            displayName: "Residual Waste",
-            emoji: "⬛",
+        .b3: Bin(
+            id: .b3,
+            displayName: "Hazardous (Red)",
+            emoji: "🔴",
+            colorName: "red",
+            spokenText: "Hazardous waste. Put in Red Bin.",
+            summary: "Batteries, e-waste, chemicals, and sharp glass shards."
+        ),
+        .residu: Bin(
+            id: .residu,
+            displayName: "Residual (Gray)",
+            emoji: "⚪️",
             colorName: "gray",
-            spokenText: "Residual waste. Put in Black Bin.",
-            summary: "Non-recyclable items, composite materials, or general residual trash."
+            spokenText: "Residual waste. Put in Gray Bin.",
+            summary: "General non-recyclable trash and composite waste."
         ),
         .retired: Bin(
             id: .retired,

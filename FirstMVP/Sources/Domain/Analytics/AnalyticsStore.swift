@@ -6,17 +6,26 @@ public class AnalyticsStore: @unchecked Sendable {
     public static let shared = AnalyticsStore()
 
     public private(set) var records: [ScanRecord] = []
-    private let storageKey = "ecosort_scanned_records"
+    private let storageKey = "ecosort_scanned_records_v2"
 
     public init() {
         loadFromStorage()
     }
 
     public func appendRecord(objectName: String, materialName: String, binID: BinID) {
+        var carbonGrams = 0
+        switch binID {
+        case .organik: carbonGrams = 50
+        case .anorganik: carbonGrams = 200
+        case .kertas: carbonGrams = 100
+        default: carbonGrams = 0
+        }
+
         let newRecord = ScanRecord(
             objectName: objectName,
             materialName: materialName,
-            binID: binID
+            binID: binID,
+            carbonSavedGrams: carbonGrams
         )
         records.insert(newRecord, at: 0)
         saveToStorage()
@@ -30,20 +39,18 @@ public class AnalyticsStore: @unchecked Sendable {
     public var totalCount: Int {
         records.count
     }
+    
+    public var totalCarbonSavedGrams: Int {
+        records.reduce(0) { $0 + $1.carbonSavedGrams }
+    }
 
     public func count(for binID: BinID) -> Int {
         records.filter { $0.binID == binID }.count
     }
 
-    public var recyclingRatePercentage: Int {
-        guard totalCount > 0 else { return 0 }
-        let countRecyclable = count(for: .recyclable)
-        return Int((Double(countRecyclable) / Double(totalCount)) * 100.0)
-    }
-
     public var diversionRatePercentage: Int {
         guard totalCount > 0 else { return 0 }
-        let totalDiverted = count(for: .organic) + count(for: .recyclable)
+        let totalDiverted = count(for: .organik) + count(for: .anorganik) + count(for: .kertas)
         return Int((Double(totalDiverted) / Double(totalCount)) * 100.0)
     }
 
