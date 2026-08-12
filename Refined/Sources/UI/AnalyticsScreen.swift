@@ -73,31 +73,71 @@ struct AnalyticsScreen: View {
 
     private var headlineSection: some View {
         Section("Overview") {
-            LabeledContent("Items counted", value: "\(summary.totalCount)")
-            LabeledContent("Diversion rate", value: "\(summary.diversionRatePercent)%")
-            LabeledContent("Recycling rate", value: "\(summary.recyclingRatePercent)%")
-            // How often the station declined to answer. High values mean the waste
-            // stream contains things the rules or the model do not cover yet, which is
-            // the most actionable number on this screen.
-            LabeledContent("Unsure", value: "\(summary.uncertaintyRatePercent)%")
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+                kpiCard(title: "Items Counted", value: "\(summary.totalCount)", icon: "tray.full.fill", color: .blue)
+                kpiCard(title: "Diversion Rate", value: "\(summary.diversionRatePercent)%", icon: "leaf.fill", color: .green)
+                kpiCard(title: "Recycling Rate", value: "\(summary.recyclingRatePercent)%", icon: "arrow.3.trianglepath", color: .yellow)
+                kpiCard(title: "Unsure Rate", value: "\(summary.uncertaintyRatePercent)%", icon: "questionmark.circle.fill", color: .orange)
+            }
+            .listRowInsets(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
+            .listRowBackground(Color.clear)
         }
     }
 
+    private func kpiCard(title: String, value: String, icon: String, color: Color) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Image(systemName: icon)
+                    .foregroundStyle(color)
+                    .font(.title3)
+                Spacer()
+            }
+            Text(value)
+                .font(.system(size: 24, weight: .bold, design: .rounded))
+                .foregroundStyle(.primary)
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 16))
+    }
+
     private var binBreakdownSection: some View {
-        Section("By bin") {
+        Section("By Bin") {
             ForEach(summary.binShares, id: \.binID) { share in
-                LabeledContent {
-                    Text("\(share.count) · \(share.percentage)%")
-                        .foregroundStyle(.secondary)
-                } label: {
-                    Label {
-                        Text(ruleset.bin(for: share.binID)?.displayName ?? "Retired bin")
-                    } icon: {
+                let binColor = ruleset.bin(for: share.binID).map { Color(hex: $0.colorHex) } ?? .secondary
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack {
                         Circle()
-                            .fill(ruleset.bin(for: share.binID).map { Color(hex: $0.colorHex) } ?? .secondary)
+                            .fill(binColor)
                             .frame(width: 10, height: 10)
+                        
+                        Text(ruleset.bin(for: share.binID)?.displayName ?? "Retired bin")
+                            .font(.subheadline.weight(.medium))
+                        
+                        Spacer()
+                        
+                        Text("\(share.count) items (\(share.percentage)%)")
+                            .font(.subheadline.weight(.bold))
+                            .foregroundStyle(.secondary)
                     }
+
+                    GeometryReader { geo in
+                        ZStack(alignment: .leading) {
+                            Capsule()
+                                .fill(Color.primary.opacity(0.08))
+                                .frame(height: 6)
+                            
+                            Capsule()
+                                .fill(binColor)
+                                .frame(width: max(0, geo.size.width * CGFloat(share.percentage) / 100.0), height: 6)
+                        }
+                    }
+                    .frame(height: 6)
                 }
+                .padding(.vertical, 4)
             }
         }
     }

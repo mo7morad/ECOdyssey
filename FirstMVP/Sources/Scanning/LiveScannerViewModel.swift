@@ -51,12 +51,20 @@ public final class LiveScannerViewModel {
         }
     }
 
+    private var lockedItem: TrackedItem?
+    private var candidateItem: TrackedItem?
+    private var candidateFramesCount = 0
+    private let framesToLock = 5
+
     public func resumeLiveCamera() {
         selectedGalleryImage = nil
         activePerception = nil
         activeBin = nil
         trackedItems = []
         itemTracker.reset()
+        lockedItem = nil
+        candidateItem = nil
+        candidateFramesCount = 0
     }
 
     private func handleDetectedItems(_ items: [TrackedItem]) {
@@ -65,18 +73,59 @@ public final class LiveScannerViewModel {
             return
         }
         trackedItems = items
+        
         if let primary = items.first {
-            activePerception = primary.perception
-            let bin = Bin.resolve(primary.assignedBinID)
-            activeBin = bin
+            let currentLabel = primary.perception.classificationLabel
+            
+            if lockedItem == nil {
+                updateCandidate(with: primary)
+            } else if let locked = lockedItem, locked.perception.classificationLabel == currentLabel {
+                candidateItem = nil
+                candidateFramesCount = 0
+                lockedItem = primary
+                updateActiveState(with: primary)
+            } else {
+                updateCandidate(with: primary)
+            }
+        } else {
+            candidateItem = nil
+            candidateFramesCount = 0
+        }
+        
+        isProcessing = false
+    }
+    
+    private func updateCandidate(with item: TrackedItem) {
+        if candidateItem?.perception.classificationLabel == item.perception.classificationLabel {
+            candidateFramesCount += 1
+        } else {
+            candidateItem = item
+            candidateFramesCount = 1
+        }
+        
+        if candidateFramesCount >= framesToLock {
+            lockedItem = item
+            updateActiveState(with: item)
+            candidateItem = nil
+            candidateFramesCount = 0
+        }
+    }
+    
+    private func updateActiveState(with item: TrackedItem) {
+        let isNewLock = activePerception?.classificationLabel != item.perception.classificationLabel
+        
+        activePerception = item.perception
+        let bin = Bin.resolve(item.assignedBinID)
+        activeBin = bin
+        
+        if isNewLock {
             recordAndAnnounce(
-                id: primary.id,
-                label: primary.perception.classificationLabel,
-                material: primary.perception.materialName,
+                id: item.id,
+                label: item.perception.classificationLabel,
+                material: item.perception.materialName,
                 bin: bin
             )
         }
-        isProcessing = false
     }
 
     private func handleStaticAnalysis(perception: ItemPerception, binID: BinID) {

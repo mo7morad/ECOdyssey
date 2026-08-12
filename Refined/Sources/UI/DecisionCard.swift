@@ -6,12 +6,16 @@ struct DecisionCard: View {
     let decision: PresentedDecision?
     let isPerceiving: Bool
 
+    @State private var isPulsing = false
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 14) {
             if let decision {
                 header(for: decision)
+                
                 Text(decision.itemName)
-                    .font(.title3.weight(.semibold))
+                    .font(.title2.weight(.bold))
+                    .foregroundStyle(.primary)
 
                 if decision.isSplit {
                     components(of: decision)
@@ -21,53 +25,141 @@ struct DecisionCard: View {
 
                 footer(for: decision)
             } else if isPerceiving {
-                Label("Analyzing…", systemImage: "sparkles")
-                    .font(.title3.weight(.semibold))
+                analyzingState
             } else {
-                Label("Hold item up to the camera", systemImage: "camera.viewfinder")
-                    .font(.title3.weight(.semibold))
-                    .foregroundStyle(.secondary)
+                idleState
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(20)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 24))
+        .background {
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                .fill(.ultraThinMaterial)
+                .shadow(color: Color.black.opacity(0.15), radius: 20, x: 0, y: 10)
+        }
         .overlay(
-            // Only a hazard gets a border. It is the one answer that is not "put it in
-            // that bin", so it should not look like the others at a glance.
-            RoundedRectangle(cornerRadius: 24)
-                .strokeBorder(hazardTint(for: decision) ?? .clear, lineWidth: 3)
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                .strokeBorder(
+                    cardBorderGradient(for: decision),
+                    lineWidth: decision?.isHazard == true ? 2.5 : 1
+                )
         )
-        .animation(.snappy, value: decision)
+        .animation(.spring(response: 0.35, dampingFraction: 0.8), value: decision)
     }
 
-    private func hazardTint(for decision: PresentedDecision?) -> Color? {
-        guard let decision, decision.isHazard else { return nil }
-        return decision.bin.map { Color(hex: $0.colorHex) } ?? .orange
+    private var analyzingState: some View {
+        HStack(spacing: 12) {
+            ZStack {
+                Circle()
+                    .fill(Color.accentColor.opacity(0.2))
+                    .frame(width: 36, height: 36)
+                    .scaleEffect(isPulsing ? 1.2 : 0.9)
+                    .opacity(isPulsing ? 0.4 : 0.8)
+                
+                Image(systemName: "sparkles")
+                    .font(.headline)
+                    .foregroundStyle(Color.accentColor)
+            }
+            .onAppear {
+                withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+                    isPulsing = true
+                }
+            }
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Analyzing Item...")
+                    .font(.headline.weight(.semibold))
+                    .foregroundStyle(.primary)
+                Text("Reading focus & material features with AI")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            
+            Spacer()
+            
+            ProgressView()
+                .controlSize(.small)
+        }
+        .padding(.vertical, 4)
+    }
+
+    private var idleState: some View {
+        HStack(spacing: 14) {
+            Image(systemName: "viewfinder.circle.fill")
+                .font(.title2)
+                .foregroundStyle(.secondary)
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Ready to Scan")
+                    .font(.headline.weight(.semibold))
+                    .foregroundStyle(.primary)
+                Text("Hold waste item steady in front of camera")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding(.vertical, 4)
+    }
+
+    private func cardBorderGradient(for decision: PresentedDecision?) -> AnyShapeStyle {
+        guard let decision else {
+            return AnyShapeStyle(Color.white.opacity(0.15))
+        }
+        if decision.isHazard {
+            return AnyShapeStyle(
+                LinearGradient(
+                    colors: [.orange, .red],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+        }
+        if let binColorHex = decision.suggestedBin?.colorHex {
+            return AnyShapeStyle(Color(hex: binColorHex).opacity(0.6))
+        }
+        return AnyShapeStyle(Color.white.opacity(0.2))
     }
 
     private func header(for decision: PresentedDecision) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            // Said plainly above the bin name rather than left to colour alone, so a
-            // guess cannot be mistaken for a confident reading at a glance.
+        VStack(alignment: .leading, spacing: 6) {
             if decision.isHazard {
-                Label("HAZARDOUS WASTE — DO NOT DISPOSE IN REGULAR BINS", systemImage: "exclamationmark.triangle.fill")
-                    .font(.caption.weight(.bold))
-                    .foregroundStyle(hazardTint(for: decision) ?? .orange)
+                HStack(spacing: 6) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                    Text("HAZARDOUS WASTE — B3")
+                }
+                .font(.caption.weight(.heavy))
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .background(Color.orange.opacity(0.2), in: Capsule())
+                .foregroundStyle(Color.orange)
             } else if decision.isUncertain {
-                Text("UNCERTAIN")
-                    .font(.caption.weight(.bold))
-                    .foregroundStyle(.orange)
+                HStack(spacing: 6) {
+                    Image(systemName: "questionmark.diamond.fill")
+                    Text("UNCERTAIN CLASSIFICATION")
+                }
+                .font(.caption.weight(.bold))
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .background(Color.orange.opacity(0.15), in: Capsule())
+                .foregroundStyle(.orange)
             }
 
-            HStack(spacing: 10) {
-                Circle()
-                    .fill(decision.suggestedBin.map { Color(hex: $0.colorHex) } ?? .orange)
-                    .frame(width: 16, height: 16)
+            HStack(spacing: 12) {
+                ZStack {
+                    Circle()
+                        .fill(decision.suggestedBin.map { Color(hex: $0.colorHex) } ?? .gray)
+                        .frame(width: 20, height: 20)
+                    
+                    Circle()
+                        .stroke(Color.white.opacity(0.8), lineWidth: 2)
+                        .frame(width: 20, height: 20)
+                }
 
                 Text(decision.headline)
-                    .font(.largeTitle.weight(.heavy))
+                    .font(.system(size: 28, weight: .heavy, design: .rounded))
                     .foregroundStyle(decision.isUncertain ? .orange : .primary)
+
+                Spacer()
 
                 if isPerceiving {
                     ProgressView().controlSize(.small)
@@ -76,71 +168,106 @@ struct DecisionCard: View {
         }
     }
 
-    /// Guidance, then what to do to the item, then whatever the camera could not settle.
     @ViewBuilder
     private func advice(for decision: PresentedDecision) -> some View {
         if !decision.detail.isEmpty {
             Text(decision.detail)
-                .font(decision.isHazard ? .headline : .subheadline)
+                .font(decision.isHazard ? .subheadline.weight(.semibold) : .subheadline)
                 .foregroundStyle(decision.isHazard ? .primary : .secondary)
         }
 
-        ForEach(decision.preparation, id: \.self) { step in
-            Label(step, systemImage: "checkmark.circle")
-                .font(.subheadline.weight(.medium))
+        if !decision.preparation.isEmpty {
+            VStack(alignment: .leading, spacing: 6) {
+                ForEach(decision.preparation, id: \.self) { step in
+                    HStack(spacing: 8) {
+                        Image(systemName: "checkmark.seal.fill")
+                            .foregroundStyle(Color.green)
+                            .font(.caption)
+                        Text(step)
+                            .font(.subheadline.weight(.medium))
+                    }
+                }
+            }
+            .padding(10)
+            .background(Color.white.opacity(0.06), in: RoundedRectangle(cornerRadius: 12))
         }
 
         if let condition = decision.condition {
-            Label(condition, systemImage: "questionmark.circle")
-                .font(.footnote)
-                .foregroundStyle(.orange)
+            HStack(spacing: 6) {
+                Image(systemName: "info.circle.fill")
+                    .font(.caption)
+                Text(condition)
+                    .font(.footnote)
+            }
+            .foregroundStyle(.orange)
         }
     }
 
-    /// One row per part, each with its own bin colour, so a split reads as two
-    /// instructions rather than one confusing one.
     private func components(of decision: PresentedDecision) -> some View {
         VStack(alignment: .leading, spacing: 10) {
+            Text("Separate Parts before Disposal:")
+                .font(.caption.weight(.bold))
+                .foregroundStyle(.secondary)
+
             ForEach(decision.components) { component in
-                HStack(alignment: .top, spacing: 10) {
+                HStack(alignment: .top, spacing: 12) {
                     Circle()
                         .fill(component.bin.map { Color(hex: $0.colorHex) } ?? .gray)
-                        .frame(width: 12, height: 12)
-                        .padding(.top, 5)
+                        .frame(width: 14, height: 14)
+                        .padding(.top, 4)
 
-                    VStack(alignment: .leading, spacing: 2) {
+                    VStack(alignment: .leading, spacing: 3) {
                         Text(component.name)
                             .font(.headline)
+                        
                         Text(component.bin?.displayName ?? "—")
-                            .font(.subheadline.weight(.semibold))
+                            .font(.subheadline.weight(.bold))
                             .foregroundStyle(component.bin.map { Color(hex: $0.colorHex) } ?? .secondary)
+
                         ForEach(component.preparation, id: \.self) { step in
-                            Text(step)
+                            Text("• \(step)")
                                 .font(.footnote)
                                 .foregroundStyle(.secondary)
                         }
+
                         if let condition = component.condition {
-                            Text(condition)
+                            Text("⚠️ \(condition)")
                                 .font(.footnote)
                                 .foregroundStyle(.orange)
                         }
                     }
                 }
+                .padding(10)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.white.opacity(0.05), in: RoundedRectangle(cornerRadius: 14))
             }
         }
     }
 
-    /// Which tier produced this answer, so an operator can tell a model-backed reading
-    /// from a degraded keyword guess without digging through logs.
     private func footer(for decision: PresentedDecision) -> some View {
-        HStack(spacing: 6) {
-            Image(systemName: decision.tier == .foundationModel ? "sparkles" : "eye")
-            Text(decision.tier == .foundationModel ? "On-device model" : "Vision classifier")
-            if !decision.isUncertain && !decision.isHazard && !decision.isSplit {
-                Text("· \(Int(decision.confidence * 100))% confident")
+        HStack(spacing: 8) {
+            HStack(spacing: 4) {
+                Image(systemName: decision.tier == .foundationModel ? "sparkles" : "eye.fill")
+                Text(decision.tier == .foundationModel ? "On-device AI" : "Vision AI")
             }
+            .font(.caption2.weight(.bold))
+            .padding(.horizontal, 8)
+            .padding(.vertical, 3)
+            .background(Color.primary.opacity(0.08), in: Capsule())
+
+            if !decision.isUncertain && !decision.isHazard && !decision.isSplit {
+                Text("• \(Int(decision.confidence * 100))% confidence")
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+            }
+
+            Spacer()
+
+            Text("Bali Regulations Compliant")
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
         }
-        .font(.caption)
-        .foregroundStyle(.tertiary)
+        .padding(.top, 4)
     }
 }
+

@@ -9,28 +9,28 @@
       "displayName": "Organic",
       "colorHex": "#34C759",
       "spokenPhrase": "Organic bin",
-      "guidance": "Food scraps, fruit peels, leaves. Processed into compost."
+      "guidance": "Food scraps, fruit peels, leaves, Canang sari offerings, coconut husks. Processed into compost."
     },
     {
       "id": "anorganik",
       "displayName": "Recyclable",
       "colorHex": "#FFCC00",
       "spokenPhrase": "Recyclable bin",
-      "guidance": "Clean and dry plastic, metal, paper, and glass."
+      "guidance": "Clean and dry plastic (bottles, cups), metal, paper, cardboard, and glass."
     },
     {
       "id": "b3",
       "displayName": "Hazardous",
       "colorHex": "#FF9500",
       "spokenPhrase": "Hazardous waste box",
-      "guidance": "Hazardous materials. Never mix with regular waste."
+      "guidance": "Hazardous materials (batteries, vapes, lamps, spray cans, electronics). Never mix with regular waste."
     },
     {
       "id": "residu",
       "displayName": "Residual",
       "colorHex": "#8E8E93",
       "spokenPhrase": "Residual bin",
-      "guidance": "Waste that cannot be recycled or composted."
+      "guidance": "Waste that cannot be recycled or composted (single-use plastic bags/kresek, coffee sachets, soiled wrappers)."
     }
   ],
 
@@ -153,7 +153,7 @@
     },
     {
       "id": "cp_nasi_bungkus",
-      "whenItemMatches": ["wrapped rice", "food wrap", "takeaway wrap"],
+      "whenItemMatches": ["nasi bungkus", "wrapped rice", "food wrap", "takeaway wrap"],
       "parts": [
         {
           "name": "Food leftovers",
@@ -166,6 +166,23 @@
         }
       ],
       "note": "Common takeaway case: greased paper plus an inner plastic layer, with food still in it."
+    },
+    {
+      "id": "cp_canang_sari",
+      "whenItemMatches": ["canang sari", "canang", "offering", "floral offering"],
+      "parts": [
+        {
+          "name": "Organic floral matter & leaf tray",
+          "binID": "organik",
+          "preparation": ["Remove plastic staples, synthetic ribbons, or food wrappers"]
+        },
+        {
+          "name": "Non-biodegradable attachments",
+          "binID": "residu",
+          "condition": "Staples, synthetic ribbons, and plastic incense wrappers cannot be composted"
+        }
+      ],
+      "note": "Balinese daily floral offering (Canang sari). Organic matter goes to Organic bin, non-biodegradable attachments go to Residual."
     }
   ],
 
@@ -272,10 +289,10 @@
       "food", "fruit", "vegetable", "produce", "leftovers", "meal", "snack",
       "banana", "apple", "orange", "lemon", "lime", "pear", "peach", "plum", "grape",
       "melon", "watermelon", "pineapple", "strawberry", "berry", "mango", "kiwi",
-      "papaya", "jackfruit", "coconut", "coconut shell", "durian",
+      "papaya", "jackfruit", "coconut", "coconut shell", "coconut husk", "kelapa", "sabut kelapa", "durian",
       "bread", "toast", "bagel", "pretzel", "croissant", "pastry", "cake", "cookie",
       "donut", "doughnut", "pizza", "sandwich", "burger", "cheeseburger", "hotdog",
-      "taco", "burrito", "pasta", "noodle", "rice", "soup", "salad", "cereal",
+      "taco", "burrito", "pasta", "noodle", "rice", "nasi", "soup", "salad", "cereal",
       "broccoli", "carrot", "cucumber", "corn", "mushroom", "potato", "tomato",
       "onion", "pepper", "lettuce", "cabbage", "avocado", "bean", "pea", "chili",
       "meat", "chicken", "fish", "egg", "eggshell", "cheese", "yoghurt", "yogurt",
@@ -285,12 +302,12 @@
     "plant_matter": [
       "flower", "leaf", "leaves", "plant", "daisy", "rose", "potted plant",
       "grass", "twig", "branch", "soil", "moss", "fern", "bouquet",
-      "palm leaf", "banana leaf", "frangipani", "offering"
+      "palm leaf", "banana leaf", "daun pisang", "frangipani", "kamboja", "offering", "canang", "canang sari", "janur"
     ],
     "pet_plastic": [
       "bottle", "water bottle", "pop bottle", "soda bottle", "plastic bottle",
       "sports bottle", "shampoo bottle", "detergent bottle", "milk jug", "jug",
-      "soda", "cola", "beverage"
+      "plastic cup", "water cup", "gelas plastik", "soda", "cola", "beverage"
     ],
     "hdpe_plastic": [
       "plastic container", "tupperware", "yoghurt pot", "yogurt pot", "plastic tub",
@@ -299,7 +316,7 @@
     ],
     "soft_plastic": [
       "plastic bag", "shopping bag", "bag", "wrapper", "wrap", "cling film", "film",
-      "packet", "sachet", "bubble wrap", "plastic wrap", "pouch", "sack"
+      "packet", "sachet", "kemasan sachet", "kresek", "tas kresek", "bubble wrap", "plastic wrap", "pouch", "sack"
     ],
     "polystyrene": ["styrofoam", "foam cup", "polystyrene", "foam", "packing peanut", "foam box"],
     "plastic_straw": ["straw", "drinking straw", "plastic straw", "stirrer"],

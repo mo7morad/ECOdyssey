@@ -93,4 +93,19 @@ struct KeywordMatcherTests {
         #expect(materials[0].materialID == "recyclable")
         #expect(materials[1].materialID == "organic")
     }
+
+    @Test("Comma-separated Vision labels match keywords cleanly")
+    func commaSeparatedVisionLabelsMatchKeywords() {
+        let hints = ["pet_plastic": ["water bottle"], "organic": ["banana"]]
+        let materials = KeywordMatcher.findMaterials(
+            from: [
+                (identifier: "bottle, water_bottle", confidence: 0.85),
+                (identifier: "banana, fruit", confidence: 0.75)
+            ],
+            using: hints
+        )
+        #expect(materials.count == 2)
+        #expect(materials[0].materialID == "pet_plastic")
+        #expect(materials[1].materialID == "organic")
+    }
 }

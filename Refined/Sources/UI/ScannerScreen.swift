@@ -46,18 +46,44 @@ struct ScannerScreen: View {
             .ignoresSafeArea()
 
             VStack {
-                HStack(spacing: 12) {
-                    Spacer()
-                    stationButton("photo.on.rectangle") { isShowingGallery = true }
-                    stationButton("chart.bar.fill") { isShowingAnalytics = true }
-                }
-                .padding()
+                topHeaderBar
+                    .padding(.horizontal)
+                    .padding(.top, 10)
 
                 Spacer()
 
                 DecisionCard(decision: coordinator.latestDecision, isPerceiving: coordinator.isPerceiving)
                     .padding(.horizontal)
-                    .padding(.bottom, 40)
+                    .padding(.bottom, 30)
+            }
+        }
+    }
+
+    private var topHeaderBar: some View {
+        HStack(spacing: 12) {
+            HStack(spacing: 8) {
+                Image(systemName: "leaf.circle.fill")
+                    .font(.title3)
+                    .foregroundStyle(Color.green)
+
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("ECOdyssey")
+                        .font(.headline.weight(.bold))
+                        .foregroundStyle(.primary)
+                    Text("Bali Waste Station")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 8)
+            .background(.thinMaterial, in: Capsule())
+
+            Spacer()
+
+            HStack(spacing: 10) {
+                stationButton("photo.on.rectangle") { isShowingGallery = true }
+                stationButton("chart.bar.fill") { isShowingAnalytics = true }
             }
         }
     }

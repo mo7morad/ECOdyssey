@@ -90,7 +90,7 @@ public enum KeywordMatcher {
     }
 
     private static func tokenize(_ text: String) -> [String] {
-        let set = CharacterSet(charactersIn: "_- ")
+        let set = CharacterSet.alphanumerics.inverted
         return text.lowercased().components(separatedBy: set).filter { !$0.isEmpty }
     }
     
